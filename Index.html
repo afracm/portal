@@ -1,0 +1,3278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <title>TMA Cabin Crew Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    .pwa-install-banner {
+  position: fixed;
+  left: 14px;
+  right: 14px;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  z-index: 9999;
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.pwa-install-banner.show {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pwa-install-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(79,70,229,0.12);
+  border-radius: 22px;
+  padding: 14px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.16);
+}
+
+.pwa-install-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pwa-install-icon{
+  width:52px;
+  height:52px;
+  border-radius:16px;
+  overflow:hidden;
+  flex-shrink:0;
+  background:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #e5e7eb;
+
+}
+
+.pwa-install-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pwa-install-text {
+  min-width: 0;
+}
+
+.pwa-install-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.pwa-install-subtitle {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+.pwa-install-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pwa-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.pwa-btn-primary{
+  background:#c8102e;
+  color:#ffffff;
+  box-shadow:0 10px 20px rgba(200,16,46,0.22);
+}
+
+.pwa-btn-primary:hover {
+  transform: translateY(-1px);
+}
+
+.pwa-btn-ghost {
+  background: #f3f4f6;
+  color: #374151;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  font-size: 16px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* iPhone install sheet */
+.ios-install-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+}
+
+.ios-install-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.38);
+}
+
+.ios-install-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-radius: 24px 24px 0 0;
+  padding: 16px 18px 28px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.16);
+  animation: slideUpSheet 0.28s ease;
+}
+
+.ios-install-handle {
+  width: 42px;
+  height: 5px;
+  border-radius: 999px;
+  background: #d1d5db;
+  margin: 0 auto 14px;
+}
+
+.ios-install-panel h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #111827;
+}
+
+.ios-install-panel p {
+  margin: 0 0 10px;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.ios-install-panel ol {
+  margin: 0 0 18px 18px;
+  padding: 0;
+  color: #111827;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.ios-done-btn {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+@keyframes slideUpSheet {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 520px) {
+  .pwa-install-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pwa-install-actions {
+    width: 100%;
+  }
+
+  .pwa-btn-primary {
+    flex: 1;
+  }
+}
+    html{scroll-behavior:smooth}
+    :root{
+      --accent:#C8102E;
+      --red:#C8102E;
+      --red-dark:#991B1B;
+      --primary:#4F46E5;
+      --primary-dark:#3730A3;
+      --primary-soft:#EEF2FF;
+      --card:#FFFFFF;
+      --text:#0F172A;
+      --muted:#64748B;
+      --line:#E2E8F0;
+      --bg:#F8FAFC;
+      --success:#16A34A;
+      --warning:#F59E0B;
+      --shadow:0 10px 30px rgba(15,23,42,.06);
+      --shadow-soft:0 18px 40px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{overflow-x:hidden}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top right, rgba(79,70,229,.08), transparent 22%),
+        radial-gradient(circle at top left, rgba(200,16,46,.04), transparent 18%),
+        linear-gradient(180deg,#FCFDFE 0%, #F8FAFC 100%);
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      padding-bottom:92px;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .app-shell{max-width:860px;margin:0 auto;padding:84px 14px 14px;overflow:visible}
+    .loader-overlay{position:fixed;inset:0;z-index:99999;background:linear-gradient(180deg,#fafbfd 0%,#f3f6f9 100%);display:flex;align-items:center;justify-content:center;transition:opacity .35s ease, visibility .35s ease}
+    .loader-overlay.hide{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-card{width:min(88vw,360px);padding:24px 20px;border-radius:28px;background:rgba(255,255,255,.92);border:1px solid #E2E8F0;box-shadow:0 18px 46px rgba(15,23,42,.12);backdrop-filter:blur(14px);text-align:center}
+    .loader-mark{width:64px;height:64px;margin:0 auto 16px;border-radius:20px;background:linear-gradient(135deg,#EEF2FF 0%,#E0E7FF 100%);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:900;font-size:22px;box-shadow:0 10px 26px rgba(79,70,229,.16)}
+    .loader-title{font-size:20px;font-weight:900;letter-spacing:-.03em;color:#101828;margin-bottom:4px}
+    .loader-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+    .loader-progress{height:10px;background:#EDF2F7;border-radius:999px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(15,23,42,.06)}
+    .loader-progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#4F46E5 0%,#7C3AED 100%);border-radius:999px;transition:width .28s ease}
+    .loader-percent{margin-top:12px;font-size:22px;font-weight:900;letter-spacing:-.03em;color:var(--primary-dark)}
+    .loader-note{margin-top:4px;font-size:12px;color:#667085}
+    .soft-card{
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(226,232,240,.92);
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+    .soft-card:hover{transform:translateY(-2px)}
+    .floating-header-shell{
+      position:fixed;
+      top:10px;
+      left:0;
+      right:0;
+      z-index:1200;
+      pointer-events:none;
+    }
+    .floating-header-wrap{
+      max-width:860px;
+      margin:0 auto;
+      padding:0 14px;
+    }
+    .floating-header{
+      pointer-events:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      min-height:58px;
+      padding:12px 16px;
+      border-radius:22px;
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(226,232,240,.9);
+      box-shadow:0 12px 28px rgba(15,23,42,.08);
+      backdrop-filter:blur(18px) saturate(150%);
+      -webkit-backdrop-filter:blur(18px) saturate(150%);
+    }
+    .floating-header-left{
+      min-width:0;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .floating-header-badge{
+      width:36px;
+      height:36px;
+      border-radius:12px;
+      background:linear-gradient(135deg,#EEF2FF 0%,#E0E7FF 100%);
+      color:var(--primary);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:15px;
+      font-weight:900;
+      box-shadow:0 8px 18px rgba(79,70,229,.16);
+      flex:0 0 36px;
+    }
+    .floating-header-text{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .floating-header-title{
+      font-size:14px;
+      line-height:1.1;
+      font-weight:900;
+      color:#111827;
+      letter-spacing:-.03em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .floating-header-sub{
+      font-size:11px;
+      line-height:1.1;
+      color:#6b7280;
+      font-weight:700;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .floating-header-status{
+      flex:0 0 auto;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:var(--primary-soft);
+      border:1px solid #DDE5FF;
+      color:var(--primary);
+      font-size:11px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+    .floating-header-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:#22c55e;
+      box-shadow:0 0 0 4px rgba(34,197,94,.12);
+    }
+    .announcement-modal{
+      position:fixed;
+      inset:0;
+      z-index:1400;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px 16px 110px;
+      background:rgba(15,23,42,.28);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+    .announcement-modal.show{display:flex}
+    .announcement-modal-card{
+      width:min(100%,480px);
+      max-height:min(74vh,620px);
+      overflow:auto;
+      border-radius:28px;
+      background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(255,247,249,.94) 100%);
+      border:1px solid rgba(255,255,255,.82);
+      box-shadow:0 24px 60px rgba(17,24,39,.22);
+      padding:20px 18px 18px;
+      position:relative;
+    }
+    .announcement-modal-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      background:#fff;
+      color:var(--red);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.02em;
+      margin-bottom:12px;
+    }
+    .announcement-modal-title{
+      font-size:23px;
+      line-height:1.15;
+      font-weight:900;
+      color:#8f1027;
+      margin-bottom:10px;
+      letter-spacing:-.03em;
+    }
+    .announcement-modal-text{
+      font-size:15px;
+      line-height:1.7;
+      color:#7a2836;
+      white-space:pre-wrap;
+      margin:0;
+    }
+    .announcement-modal-actions{
+      display:flex;
+      justify-content:flex-end;
+      margin-top:18px;
+    }
+    .announcement-close-btn{
+      border:none;
+      border-radius:16px;
+      min-height:44px;
+      padding:10px 16px;
+      background:linear-gradient(180deg,#d31a3c 0%,#bf0f2d 100%);
+      color:#fff;
+      font-size:14px;
+      font-weight:800;
+      box-shadow:0 12px 24px rgba(31,58,95,.22);
+    }
+    .announcement-card{
+      position:relative;overflow:hidden;
+      background:radial-gradient(circle at top right, rgba(255,255,255,.7), transparent 35%), linear-gradient(135deg,#FFFFFF 0%,#F8FAFF 100%);
+      border:1px solid #E2E8F0;border-radius:24px;padding:18px 18px 16px 20px;box-shadow:var(--shadow)
+    }
+    .announcement-card::before{
+      content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--primary),#7C3AED)
+    }
+    .announcement-chip{
+      display:inline-flex;align-items:center;gap:6px;background:var(--primary-soft);border:1px solid #DDE5FF;color:var(--primary);
+      padding:7px 12px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.3px;margin-bottom:10px
+    }
+    .announcement-title{font-size:20px;font-weight:900;color:#1E293B;margin-bottom:6px;line-height:1.2}
+    .announcement-text{font-size:15px;color:#475569;line-height:1.6;margin:0;white-space:pre-wrap}
+    .announcement-text.clamped{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .announcement-toggle{margin-top:10px;border:none;background:transparent;color:var(--primary);font-weight:800;padding:0;font-size:13px}
+    .section-label{font-size:16px;font-weight:900;margin-bottom:10px;color:#111827}
+    .activity-ticker{
+      display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:#fff;
+      border:1px solid #E2E8F0;box-shadow:var(--shadow);overflow:hidden
+    }
+    .activity-ticker-label{
+      flex:0 0 auto;font-size:11px;font-weight:900;color:var(--primary);background:var(--primary-soft);padding:6px 10px;border-radius:999px
+    }
+    .activity-ticker-window{overflow:hidden;white-space:nowrap;position:relative;flex:1 1 auto;min-width:0}
+    .activity-ticker-track{
+      display:inline-block;white-space:nowrap;animation:tickerScroll 18s linear infinite;
+      will-change:transform;color:#4b5563;font-size:13px;font-weight:700
+    }
+    .activity-sep{color:var(--primary);font-weight:900;padding:0 14px}
+    @keyframes tickerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    .slider-switch{
+      display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px
+    }
+    .slider-switch-btn{
+      border:none;border-radius:999px;padding:10px 14px;font-weight:800;font-size:13px;
+      background:#F1F5F9;color:#475569;min-height:42px;transition:.2s ease
+    }
+    .slider-switch-btn.active{
+      background:var(--primary-soft);color:var(--primary);box-shadow:inset 0 0 0 1px #DDE5FF
+    }
+
+    .coverflow-wrap{position:relative;height:282px;overflow:hidden;touch-action:pan-y;perspective:1400px}
+    .coverflow-stage{position:relative;height:100%;transform-style:preserve-3d}
+    .cover-card{
+      position:absolute;left:50%;top:12px;bottom:12px;width:64%;margin-left:-32%;border-radius:28px;background:
+      radial-gradient(circle at top right, rgba(255,255,255,.35), transparent 34%),
+      linear-gradient(180deg,#eceff3 0%,#e5e9ef 100%);
+      border:1px solid rgba(255,255,255,.9);box-shadow:0 18px 42px rgba(17,24,39,.10);
+      transition:transform .72s cubic-bezier(.22,.61,.36,1), opacity .58s ease, filter .58s ease;
+      overflow:hidden;display:flex;align-items:center;justify-content:center;will-change:transform,opacity,filter
+    }
+    .cover-card.current{opacity:1;z-index:4;filter:none;transform:translateX(0) translateZ(0) rotateY(0deg) scale(1)}
+    .cover-card.prev{opacity:.88;z-index:3;filter:blur(.2px) saturate(.84);transform:translateX(-68%) translateZ(-120px) rotateY(28deg) scale(.84)}
+    .cover-card.next{opacity:.88;z-index:3;filter:blur(.2px) saturate(.84);transform:translateX(68%) translateZ(-120px) rotateY(-28deg) scale(.84)}
+    .cover-card.hidden-left{opacity:0;z-index:1;filter:blur(2px) saturate(.7);transform:translateX(-118%) translateZ(-240px) rotateY(38deg) scale(.7);pointer-events:none}
+    .cover-card.hidden-right{opacity:0;z-index:1;filter:blur(2px) saturate(.7);transform:translateX(118%) translateZ(-240px) rotateY(-38deg) scale(.7);pointer-events:none}
+    .cover-content{
+      width:100%;height:100%;padding:18px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center
+    }
+    .cover-card.prev .cover-content,.cover-card.next .cover-content{padding:10px 8px}
+    .cover-photo{
+      width:108px;height:108px;border-radius:50%;margin:0 auto 14px;background:linear-gradient(135deg,#eceff3,#f7f7f8);
+      display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:22px;font-weight:900;color:#6b7280;
+      border:6px solid #f6dde2;flex:0 0 auto;box-shadow:0 8px 18px rgba(17,24,39,.10)
+    }
+    .cover-photo img{width:100%;height:100%;object-fit:cover}
+    .cover-rank{
+      display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;border-radius:999px;background:#fdecef;
+      color:#c8102e;font-size:12px;font-weight:900;margin-bottom:10px
+    }
+    .cover-name{font-size:19px;font-weight:900;color:#111827;margin-bottom:6px;line-height:1.2;text-shadow:0 .25px 0 rgba(17,24,39,.45)}
+    .cover-caption{color:#6b7280;font-size:14px;line-height:1.4}
+    .cover-card.prev .cover-photo,.cover-card.next .cover-photo{width:62px;height:62px;margin-bottom:8px;border-width:4px;font-size:14px}
+    .cover-card.prev .cover-rank,.cover-card.next .cover-rank,.cover-card.prev .cover-caption,.cover-card.next .cover-caption{display:none}
+    .cover-card.prev .cover-name,.cover-card.next .cover-name{
+      font-size:11px;margin-bottom:0;color:#4b5563;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+    }
+    .coverflow-controls{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:10px}
+    .slider-arrow{
+      width:46px;height:46px;border:none;border-radius:50%;background:#f3f4f6;color:#374151;font-size:20px;font-weight:900;cursor:pointer
+    }
+    .dots{display:flex;justify-content:center;gap:10px}
+    .dot{width:10px;height:10px;border-radius:50%;background:#d1d5db;cursor:pointer;transition:.2s ease}
+    .dot.active{width:32px;border-radius:999px;background:#c8102e}
+
+    .section-anchor{scroll-margin-top:24px}
+    .menu-card{overflow:hidden;background:#fff;border:1px solid #E2E8F0;box-shadow:0 8px 20px rgba(15,23,42,.05)}
+    .menu-head{display:flex;justify-content:space-between;align-items:center;padding:16px 16px;cursor:pointer;background:linear-gradient(180deg,#FFFFFF 0%,#FBFDFF 100%)}
+    .menu-title{font-weight:900;font-size:15px;letter-spacing:-.02em}
+    .chevron{
+      width:36px;height:36px;border-radius:50%;background:#F1F5F9;display:flex;align-items:center;justify-content:center;
+      color:#64748B;font-weight:900;transition:transform .25s ease, background .25s ease, color .25s ease;flex:0 0 36px
+    }
+    .menu-body{max-height:0;overflow:hidden;transition:max-height .28s ease, background .2s ease;border-top:1px solid transparent;background:#f8fafc}
+    .menu-card.open .menu-body{border-top:1px solid #e6ebf0;background:#f7f9fc}
+    .menu-card.open .menu-head{background:linear-gradient(180deg,#F8FAFF 0%,#FFFFFF 100%)}
+    .menu-card.open .chevron{transform:rotate(180deg);background:var(--primary-soft);color:var(--primary)}
+    .menu-item{
+      padding:11px 14px;border-top:1px solid #EDF2F7;display:flex;justify-content:space-between;align-items:center;cursor:pointer;min-height:46px;
+      font-size:12px;color:#475569;background:#FAFCFF;transition:background .18s ease
+    }
+    .menu-item:hover{background:#F4F8FF}
+    .menu-item > div:first-child{font-weight:700;font-size:12px;color:#596273}
+    .badge-soft{
+      font-size:10px;font-weight:800;color:var(--primary);background:var(--primary-soft);border-radius:999px;padding:5px 8px;min-width:46px;text-align:center
+    }
+
+    .month-mini-list{padding:6px 12px 10px 12px;border-top:1px solid #edf1f5;background:#f2f6fa}
+    .month-mini-item{
+      display:flex;align-items:center;justify-content:space-between;padding:4px 0;font-size:11px;color:#607086
+    }
+    .month-mini-rank{font-weight:900;color:var(--red);width:18px;flex:0 0 18px}
+    .month-mini-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-left:6px}
+
+    .ccm-showcase-wrap{margin-top:2px}
+    .ccm-showcase-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .ccm-showcase-title{font-size:16px;font-weight:900;letter-spacing:-.02em;color:#111827;text-shadow:0 .25px 0 rgba(17,24,39,.25)}
+    .ccm-month-grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .ccm-month-card{background:linear-gradient(180deg,#fff 0%,#fbfcfd 100%);border:1px solid #e8edf3;border-radius:20px;box-shadow:0 8px 20px rgba(17,24,39,.05);overflow:hidden}
+    .ccm-month-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 10px;border-bottom:1px solid #eef2f6}
+    .ccm-month-name{font-size:14px;font-weight:900;color:var(--primary);letter-spacing:-.02em}
+    .ccm-month-badge{font-size:10px;font-weight:800;color:var(--red);background:#fcecef;border-radius:999px;padding:5px 8px}
+    .ccm-list{padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px}
+    .ccm-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 9px;border-radius:15px;background:#f9fbfd;border:1px solid #eef2f6}
+    .ccm-item-left{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+    .ccm-rank{width:28px;height:28px;border-radius:999px;background:#fcecef;color:var(--red);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex:0 0 28px}
+    .ccm-thumb{width:38px;height:38px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#eef1f4,#f8f9fb);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#6b7280;flex:0 0 38px}
+    .ccm-thumb img{width:100%;height:100%;object-fit:cover}
+    .ccm-meta{min-width:0;display:flex;flex-direction:column}
+    .ccm-name{font-size:13px;font-weight:800;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ccm-code{font-size:11px;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    @media (min-width:700px){.ccm-month-grid{grid-template-columns:1fr 1fr}}
+
+
+    .ccm-accordion{
+      background:#fff;
+      border:1px solid #e8edf3;
+      border-radius:22px;
+      box-shadow:0 8px 20px rgba(17,24,39,.05);
+      overflow:hidden;
+      margin-bottom:14px;
+    }
+    .ccm-accordion-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:15px 16px;
+      cursor:pointer;
+      background:linear-gradient(180deg,#ffffff 0%,#fafbfd 100%);
+    }
+    .ccm-accordion.open .ccm-accordion-head{
+      background:linear-gradient(180deg,#fff5f7 0%,#fff 100%);
+    }
+    .ccm-accordion-title{
+      font-size:15px;
+      font-weight:900;
+      color:#111827;
+      letter-spacing:-.02em;
+    }
+    .ccm-accordion-chevron{
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:#f3f4f6;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#6b7280;
+      font-weight:900;
+      transition:transform .25s ease;
+      flex:0 0 36px;
+    }
+    .ccm-accordion.open .ccm-accordion-chevron{
+      transform:rotate(180deg);
+      background:#fdecef;
+      color:var(--red);
+    }
+    .ccm-accordion-body{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .28s ease;
+      background:#f8fafc;
+      border-top:1px solid transparent;
+    }
+    .ccm-accordion.open .ccm-accordion-body{
+      border-top:1px solid #e6ebf0;
+    }
+    .ccm-month-acc{
+      border-top:1px solid #edf1f5;
+      background:#fff;
+    }
+    .ccm-month-acc-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:13px 14px;
+      cursor:pointer;
+    }
+    .ccm-month-acc-title{
+      font-size:14px;
+      font-weight:900;
+      color:var(--red);
+    }
+    .ccm-month-acc-badge{
+      font-size:10px;
+      font-weight:800;
+      color:var(--red);
+      background:#fcecef;
+      border-radius:999px;
+      padding:5px 8px;
+      margin-right:8px;
+    }
+    .ccm-month-acc-right{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .ccm-month-acc-chevron{
+      width:30px;
+      height:30px;
+      border-radius:50%;
+      background:#f3f4f6;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#6b7280;
+      font-weight:900;
+      transition:transform .25s ease;
+    }
+    .ccm-month-acc.open .ccm-month-acc-chevron{
+      transform:rotate(180deg);
+      background:#fdecef;
+      color:var(--red);
+    }
+    .ccm-month-acc-body{
+      max-height:0;
+      overflow:hidden;
+      transition:max-height .28s ease;
+      background:#fbfcfd;
+    }
+
+    .search-wrap{position:sticky;top:0;z-index:70;padding:0 0 10px;background:linear-gradient(180deg,rgba(245,246,248,.98),rgba(245,246,248,.9))}
+    .phone-search-shell{padding:0 2px}
+    .phone-search-card{padding:12px 14px;border-radius:18px}
+    .phone-search-input{
+      width:100%;min-height:46px;border:none;outline:none;background:#fff;border-radius:999px;padding:12px 14px;font:inherit;color:var(--text);
+      box-shadow:0 6px 18px rgba(17,24,39,.06);border:1px solid #e6ebef
+    }
+    .touch-input,.touch-select,.touch-textarea{
+      width:100%;min-height:48px;border:none;outline:none;background:#f3f4f6;border-radius:16px;padding:12px 14px;font:inherit;color:var(--text)
+    }
+    .touch-textarea{min-height:96px;resize:vertical;border-radius:18px}
+    .pill{
+      border:none;cursor:pointer;font-weight:900;border-radius:999px;padding:13px 18px;min-height:48px
+    }
+    .pill.primary{background:linear-gradient(135deg,var(--primary),#6366F1);color:#fff;box-shadow:0 10px 20px rgba(79,70,229,.22)}
+    .pill.secondary{background:#e5e7eb;color:#111827}
+    .pill.ghost{background:#fff;color:#111827;border:1px solid #e5e7eb}
+
+    .avatar{
+      width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#eceff3,#f7f7f8);
+      display:flex;align-items:center;justify-content:center;overflow:hidden;font-weight:900;color:#6b7280;flex:0 0 56px
+    }
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .call{
+      text-decoration:none;background:linear-gradient(135deg,var(--primary),#6366F1);color:#fff;padding:12px 16px;border-radius:999px;font-weight:800;
+      min-width:84px;text-align:center;display:inline-flex;align-items:center;justify-content:center;min-height:48px;box-shadow:0 10px 20px rgba(79,70,229,.18)
+    }
+    .phone-card{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #e7ebf0;
+      border-radius:20px;padding:12px 14px;box-shadow:0 8px 20px rgba(17,24,39,.06);margin-bottom:12px
+    }
+    .phone-main{display:flex;align-items:center;gap:12px;min-width:0;flex:1}
+    .phone-meta{min-width:0}
+    .phone-code{font-weight:900;color:#111827;line-height:1.15;text-shadow:0 .2px 0 rgba(17,24,39,.35)}
+    .phone-name{font-size:12px;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .phone-number{font-size:13px;color:#374151;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .phone-actions{display:flex;gap:8px;flex:0 0 auto}
+    .action-icon{
+      width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
+      border:1px solid transparent;box-shadow:0 6px 14px rgba(17,24,39,.08)
+    }
+    .action-icon.msg{background:linear-gradient(180deg,#eaf3ff 0%,#dbe9ff 100%);color:#2563eb}
+    .action-icon.call-btn{background:linear-gradient(180deg,#eaf8ec 0%,#dff2e3 100%);color:#16a34a}
+    .action-icon svg{width:18px;height:18px;stroke-width:2}
+    .action-icon:active{transform:scale(.95)}
+
+
+    .fw-bold,.section-label,.menu-title,.phone-code,.cover-name,.announcement-title{ text-shadow:0 .25px 0 rgba(17,24,39,.35) }
+    .footer{text-align:center;font-size:12px;color:#6b7280;padding:10px 6px 2px}
+    .footer strong{color:#111827}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap}
+    .repeat-list{display:flex;flex-direction:column;gap:10px}
+    .repeat-item{border:1px solid #eceef2;border-radius:18px;padding:12px;background:#fbfbfc}
+    .status{
+      display:inline-flex;align-items:center;background:#f3f4f6;color:#4b5563;font-size:12px;font-weight:800;border-radius:999px;padding:7px 10px
+    }
+    .skeleton{
+      height:84px;border-radius:22px;margin-bottom:14px;background:linear-gradient(90deg,#ececec 25%,#f5f5f5 37%,#ececec 63%);
+      background-size:400% 100%;animation:shine 1.2s ease infinite
+    }
+    .skeleton.hero{height:140px}
+    .toast{
+      position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 16px;border-radius:999px;
+      box-shadow:0 10px 30px rgba(0,0,0,.2);z-index:9999;opacity:0;pointer-events:none;transition:.25s ease
+    }
+    .toast.show{opacity:1}
+    .bottom-nav{
+      position:fixed;left:14px;right:14px;bottom:14px;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
+      border:1px solid rgba(226,232,240,.95);box-shadow:0 14px 34px rgba(15,23,42,.12);border-radius:26px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px
+    }
+    .bottom-btn{
+      border:none;background:transparent;border-radius:18px;min-height:56px;font:inherit;font-weight:800;color:#4b5563;cursor:pointer;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px
+    }
+    .bottom-btn.active{background:var(--primary-soft);color:var(--primary);box-shadow:inset 0 0 0 1px #DDE5FF}
+    .bottom-btn-icon{font-size:18px;line-height:1}
+    .bottom-btn-text{font-size:11px}
+    .more-menu{
+      position:fixed;left:50%;transform:translateX(-50%);bottom:86px;width:min(280px, calc(100vw - 28px));background:#fff;border-radius:18px;
+      box-shadow:0 16px 40px rgba(17,24,39,.18);border:1px solid #eceef2;padding:8px;display:none;z-index:120
+    }
+    .more-menu.show{display:block}
+    .more-item{
+      width:100%;border:none;background:transparent;text-align:left;padding:13px 12px;border-radius:12px;font:inherit;font-weight:700;color:#111827;cursor:pointer;min-height:46px
+    }
+    .more-item:hover{background:#f5f6f8}
+    @keyframes shine{0%{background-position:100% 0}100%{background-position:0 0}}
+    @media (max-width:680px){
+      .floating-header{min-height:52px;padding:10px 12px}
+      .floating-header-status{display:none}
+      .floating-header-title{font-size:13px}
+      .floating-header-sub{font-size:10px}
+      .cover-card{width:72%;margin-left:-36%}
+      .cover-card.prev{transform:translateX(-60%) translateZ(-110px) rotateY(24deg) scale(.82)}
+      .cover-card.next{transform:translateX(60%) translateZ(-110px) rotateY(-24deg) scale(.82)}
+      .cover-card.hidden-left{transform:translateX(-108%) translateZ(-220px) rotateY(34deg) scale(.68)}
+      .cover-card.hidden-right{transform:translateX(108%) translateZ(-220px) rotateY(-34deg) scale(.68)}
+      .coverflow-wrap{height:260px}
+    }
+    .doc-modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:9999;
+}
+
+.doc-modal.show{
+  display:block;
+}
+
+.doc-modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(15,23,42,.45);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+
+.doc-modal-sheet{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(96vw,980px);
+  height:min(88vh,820px);
+  background:#fff;
+  border-radius:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.20);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  border:1px solid rgba(0,0,0,.06);
+}
+
+.doc-modal-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-bottom:1px solid #eceef2;
+  background:#fff;
+}
+
+.doc-modal-title{
+  font-size:16px;
+  font-weight:800;
+  color:#111827;
+}
+
+.doc-modal-subtitle{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:70vw;
+}
+
+.doc-modal-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.doc-icon-btn{
+  border:none;
+  background:#f3f4f6;
+  width:38px;
+  height:38px;
+  border-radius:999px;
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.doc-icon-btn:hover{
+  background:#e5e7eb;
+}
+
+.doc-modal-body{
+  flex:1;
+  background:#f8fafc;
+}
+
+#docPreviewFrame{
+  width:100%;
+  height:100%;
+  border:none;
+  background:#fff;
+}
+
+body.modal-open{
+  overflow:hidden;
+}
+
+@media (max-width: 768px){
+  .doc-modal-sheet{
+    width:100vw;
+    height:100vh;
+    max-width:none;
+    max-height:none;
+    border-radius:0;
+    left:0;
+    top:0;
+    transform:none;
+  }
+
+  .doc-modal-subtitle{
+    max-width:52vw;
+  }
+}
+  
+/* ===== 2026 refreshed header + drawer overrides ===== */
+body{padding-bottom:108px}
+.app-shell{padding-top:86px}
+.loader-mark img{width:42px;height:42px;object-fit:contain;display:block}
+.floating-header-shell,.floating-header-wrap,.floating-header,.floating-header-left,.floating-header-badge,.floating-header-text,.floating-header-status{display:none!important}
+.topbar-shell{position:fixed;top:10px;left:0;right:0;z-index:1400;pointer-events:none}
+.topbar-wrap{max-width:860px;margin:0 auto;padding:0 14px}
+.topbar{pointer-events:auto;min-height:58px;padding:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:24px;background:rgba(255,255,255,.82);border:1px solid rgba(226,232,240,.92);box-shadow:0 14px 34px rgba(15,23,42,.09);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%)}
+.topbar-left,.topbar-right{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.topbar-center{min-width:0;flex:1;display:flex;align-items:center;justify-content:center;gap:10px}
+.topbar-logo{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,#EEF2FF,#E0E7FF);display:flex;align-items:center;justify-content:center;overflow:hidden;flex:0 0 30px}
+.topbar-logo img{width:20px;height:20px;object-fit:contain}
+.topbar-title-wrap{min-width:0;text-align:center}
+.topbar-title{font-size:14px;font-weight:900;color:#111827;letter-spacing:-.03em;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-sub{font-size:10px;color:#6b7280;font-weight:700;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-icon-btn{width:42px;height:42px;border:none;border-radius:16px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.72);box-shadow:inset 0 0 0 1px rgba(226,232,240,.92);color:#334155;cursor:pointer;transition:.2s ease}
+.top-icon-btn:active{transform:scale(.96)}
+.top-icon-btn svg{width:19px;height:19px;stroke-width:2.2}
+.header-search-sheet{position:fixed;top:78px;left:0;right:0;z-index:1350;display:none;pointer-events:none}
+.header-search-sheet.show{display:block}
+.header-search-wrap{max-width:860px;margin:0 auto;padding:0 14px}
+.header-search-card{pointer-events:auto;border-radius:22px;background:rgba(255,255,255,.95);border:1px solid rgba(226,232,240,.92);box-shadow:0 18px 40px rgba(15,23,42,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:12px}
+.header-search-input{width:100%;min-height:48px;border:none;outline:none;background:#F8FAFC;border-radius:16px;padding:12px 16px;font:inherit;color:var(--text);box-shadow:inset 0 0 0 1px #E5EAF1}
+.header-search-hint{margin-top:8px;font-size:12px;color:#64748B;font-weight:600;padding:0 4px}
+.side-menu-overlay{position:fixed;inset:0;z-index:1500;background:rgba(15,23,42,.28);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .25s ease}
+.side-menu-overlay.show{opacity:1;pointer-events:auto}
+.side-menu{position:fixed;top:0;left:0;bottom:0;width:min(340px,88vw);z-index:1510;background:rgba(255,255,255,.96);border-right:1px solid rgba(226,232,240,.9);box-shadow:0 24px 60px rgba(15,23,42,.18);transform:translateX(-106%);transition:transform .28s ease;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-direction:column}
+.side-menu.show{transform:translateX(0)}
+.side-menu-head{padding:18px 16px 12px;border-bottom:1px solid #EEF2F6;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.side-menu-brand{display:flex;align-items:center;gap:12px;min-width:0}
+.side-menu-mark{width:44px;height:44px;border-radius:16px;background:linear-gradient(135deg,#EEF2FF,#E0E7FF);display:flex;align-items:center;justify-content:center;overflow:hidden;flex:0 0 44px;box-shadow:0 10px 20px rgba(79,70,229,.12)}
+.side-menu-mark img{width:28px;height:28px;object-fit:contain}
+.side-menu-title{font-size:15px;font-weight:900;color:#111827;letter-spacing:-.03em;line-height:1.2}
+.side-menu-sub{font-size:11px;color:#64748B;font-weight:700;line-height:1.2}
+.side-menu-body{padding:12px;overflow:auto;flex:1}
+.side-menu-section-label{font-size:11px;font-weight:900;color:#94A3B8;letter-spacing:.08em;text-transform:uppercase;padding:10px 8px 8px}
+.side-menu-list{display:flex;flex-direction:column;gap:6px}
+.side-menu-item{width:100%;border:none;background:#fff;border-radius:16px;min-height:48px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;color:#111827;font:inherit;font-weight:800;box-shadow:inset 0 0 0 1px #EBEFF5;cursor:pointer}
+.side-menu-item-left{display:flex;align-items:center;gap:12px;min-width:0}
+.side-menu-item-left svg{width:18px;height:18px;stroke-width:2.1;color:#475569}
+.side-menu-item-title{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-menu-badge{flex:0 0 auto;font-size:10px;font-weight:900;color:var(--primary);background:var(--primary-soft);border-radius:999px;padding:6px 8px}
+.hero-strip{padding:16px 16px 14px;border-radius:24px;background:linear-gradient(135deg,rgba(79,70,229,.96) 0%, rgba(99,102,241,.94) 100%);color:#fff;border:none;box-shadow:0 22px 42px rgba(79,70,229,.18)}
+.hero-top{font-size:11px;font-weight:800;opacity:.88;letter-spacing:.03em;text-transform:uppercase}
+.hero-title{font-size:22px;font-weight:900;letter-spacing:-.04em;line-height:1.08;margin-top:4px}
+.hero-sub{font-size:13px;opacity:.92;margin-top:7px;line-height:1.5}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.16);font-size:11px;font-weight:800}
+.hero-chip svg{width:14px;height:14px;stroke-width:2.1}
+.activity-ticker{border-radius:18px}
+.meta-pill-wrap{display:flex;justify-content:center;padding:6px 0 0}
+.meta-pill{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;font-size:11px;font-weight:800;color:#64748B;background:rgba(255,255,255,.9);border:1px solid #E7ECF3;border-radius:999px;padding:8px 12px;box-shadow:0 8px 20px rgba(15,23,42,.05)}
+.meta-pill strong{color:#0F172A}
+.meta-sep{opacity:.45}
+.footer{font-size:11px;color:#94A3B8;padding-top:8px}
+.bottom-nav{border-radius:28px}
+.bottom-btn{border-radius:20px;min-height:58px}
+.bottom-btn-icon svg{width:18px;height:18px;stroke-width:2.1}
+@media (max-width:680px){.topbar{min-height:54px}.topbar-title{font-size:13px}.topbar-sub{display:none}.hero-title{font-size:20px}}
+.loader-mark{
+  width:64px;
+  height:64px;
+  margin:0 auto 16px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#EEF2FF 0%,#E0E7FF 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 10px 26px rgba(79,70,229,.16);
+  overflow:hidden;
+}
+
+.loader-mark img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  display:block;
+}
+
+</style>
+</head>
+<body>
+  <div id="loaderOverlay" class="loader-overlay">
+    <div class="loader-card">
+      <div class="loader-mark">
+  <img src="https://i.imgur.com/wd5yFdE.png" alt="TMA Logo">
+</div>
+      <div class="loader-title">TMA Cabin Crew Portal</div>
+      <div class="loader-sub">Preparing your portal</div>
+      <div class="loader-progress"><div id="loaderProgressBar" class="loader-progress-bar"></div></div>
+      <div id="loaderPercent" class="loader-percent">0%</div>
+      <div id="loaderNote" class="loader-note">Loading portal data...</div>
+    </div>
+  </div>
+
+  <div class="topbar-shell">
+    <div class="topbar-wrap">
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="top-icon-btn" type="button" onclick="toggleSideMenu()" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <div class="topbar-logo"><img src="https://i.imgur.com/wd5yFdE.png" alt="TMA"></div>
+          <div class="topbar-title-wrap">
+            <div class="topbar-title" id="topbarTitle">TMA Cabin Crew Portal</div>
+            <div class="topbar-sub" id="topbarSub">Reports,Internal Docx, policies and quick crew access</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="top-icon-btn" type="button" onclick="toggleHeaderSearch()" aria-label="Search">
+            <i data-lucide="search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="headerSearchSheet" class="header-search-sheet">
+    <div class="header-search-wrap">
+      <div class="header-search-card">
+        <input id="headerSearchInput" class="header-search-input" placeholder="Search sections, phone book, or admin" autocomplete="off">
+        <div class="header-search-hint">Search on portal opens matching section. On phone page it searches contacts.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sideMenuOverlay" class="side-menu-overlay" onclick="closeSideMenu()"></div>
+  <aside id="sideMenu" class="side-menu" aria-hidden="true">
+    <div class="side-menu-head">
+      <div class="side-menu-brand">
+        <div class="side-menu-mark"><img src="https://i.imgur.com/wd5yFdE.png" alt="TMA"></div>
+        <div>
+          <div class="side-menu-title">TMA Cabin Crew Portal</div>
+          <div class="side-menu-sub">Quick navigation</div>
+        </div>
+      </div>
+      <button class="top-icon-btn" type="button" onclick="closeSideMenu()" aria-label="Close menu">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+    <div id="sideMenuBody" class="side-menu-body"></div>
+  </aside>
+
+  <div class="app-shell">
+    <div id="app">
+      <div class="skeleton hero"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <button id="bottomHome" class="bottom-btn active" onclick="goHome()">
+      <div class="bottom-btn-icon">⌂</div>
+      <div class="bottom-btn-text">Home</div>
+    </button>
+    <button id="bottomPhone" class="bottom-btn" onclick="showPage('phone')">
+  <div class="bottom-btn-icon"><i data-lucide="phone-call"></i></div>
+  <div class="bottom-btn-text">Phone-Book</div>
+</button>
+    <button id="bottomMore" class="bottom-btn" onclick="toggleMoreMenu()">
+      <div class="bottom-btn-icon">⋯</div>
+      <div class="bottom-btn-text">More</div>
+    </button>
+  </div>
+
+  <div id="moreMenu" class="more-menu"></div>
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let portalData = null;
+    let phoneData = [];
+    let filteredPhoneData = [];
+    let currentPage = 'portal';
+    let currentSearch = '';
+    let sliderMode = 'ccMonth';
+    let sliderIndexes = { ccMonth: 0, ccYear: 0, topFlight: 0 };
+    let sliderTimer = null;
+    let adminToken = localStorage.getItem('tma_admin_token') || '';
+    let adminData = null;
+    let sliderTouchStartX = 0;
+    let sliderTouchCurrentX = 0;
+    let sliderTouching = false;
+    let searchTimer = null;
+    let autoRefreshTimer = null;
+
+    function debounceSearch(fn) {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(fn, 220);
+    }
+    let lastPortalHash = '';
+    let lastPhoneHash = '';
+    let pendingOpenSectionIndex = null;
+    let openMenus = {};
+    let openMonthHistory = {};
+    let ccMonthShowcaseOpen = false;
+    let openShowcaseMonth = '';
+    let activityTickerHtml = '';
+    let loaderProgressValue = 0;
+    let loaderTimer = null;
+
+
+    function applyThemeColor(themeColor) {
+      const color = (themeColor || '#4F46E5').trim() || '#4F46E5';
+      const root = document.documentElement;
+      root.style.setProperty('--accent', color);
+      root.style.setProperty('--red', color);
+      root.style.setProperty('--red-dark', shadeColor(color, -24));
+    }
+
+    function shadeColor(hex, percent) {
+      const value = String(hex || '').trim();
+      const match = value.match(/^#?([0-9a-f]{6})$/i);
+      if (!match) return value || '#8f1027';
+      const raw = match[1];
+      const amt = Math.round(2.55 * percent);
+      const clamp = function(v){ return Math.max(0, Math.min(255, v)); };
+      const r = clamp(parseInt(raw.slice(0, 2), 16) + amt);
+      const g = clamp(parseInt(raw.slice(2, 4), 16) + amt);
+      const b = clamp(parseInt(raw.slice(4, 6), 16) + amt);
+      return '#' + [r, g, b].map(function(v){ return v.toString(16).padStart(2, '0'); }).join('');
+    }
+
+    function apiParse(res) {
+      if (!res) return null;
+      try { return typeof res === 'string' ? JSON.parse(res) : res; } catch (e) { return null; }
+    }
+
+    function stableHash(obj) {
+      try { return JSON.stringify(obj); } catch (e) { return String(Date.now()); }
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    function setLoaderProgress(value, note) {
+      loaderProgressValue = Math.max(loaderProgressValue, Math.min(100, Math.round(value)));
+      const bar = document.getElementById('loaderProgressBar');
+      const pct = document.getElementById('loaderPercent');
+      const noteEl = document.getElementById('loaderNote');
+      if (bar) bar.style.width = loaderProgressValue + '%';
+      if (pct) pct.textContent = loaderProgressValue + '%';
+      if (note && noteEl) noteEl.textContent = note;
+    }
+
+    function startLoader() {
+      setLoaderProgress(6, 'Loading portal data...');
+      clearInterval(loaderTimer);
+      loaderTimer = setInterval(function(){
+        if (loaderProgressValue < 86) setLoaderProgress(loaderProgressValue + 3);
+      }, 180);
+    }
+
+    function finishLoader() {
+      clearInterval(loaderTimer);
+      setLoaderProgress(100, 'Ready');
+      setTimeout(function(){
+        const overlay = document.getElementById('loaderOverlay');
+        if (overlay) overlay.classList.add('hide');
+      }, 180);
+    }
+
+    function sanitizePhoneNumber(number) {
+      let n = String(number || '').trim();
+      if (!n) return '';
+      n = n.replace(/[^\d+]/g, '');
+      n = n.replace(/(?!^)\+/g, '');
+      return n;
+    }
+
+    function setBottomNavActive() {
+      document.getElementById('bottomHome').classList.toggle('active', currentPage === 'portal');
+      document.getElementById('bottomPhone').classList.toggle('active', currentPage === 'phone');
+      document.getElementById('bottomMore').classList.toggle('active', currentPage === 'admin');
+    }
+
+    function goHome() {
+      currentPage = 'portal';
+      closeMoreMenu();
+      setBottomNavActive();
+      render();
+      startSlider();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showPage(page) {
+      currentPage = page;
+      closeMoreMenu();
+      setBottomNavActive();
+      render();
+      if (page !== 'portal') stopSlider();
+      if (page === 'admin' && adminToken && !adminData) renderAdminSkeleton();
+      if (page === 'admin' && adminToken && !adminData) loadAdminDashboard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMoreMenu() {
+      const menu = document.getElementById('moreMenu');
+      if (!menu) return;
+      menu.classList.toggle('show');
+    }
+
+    function closeMoreMenu() {
+      const menu = document.getElementById('moreMenu');
+      if (menu) menu.classList.remove('show');
+    }
+
+    function buildMoreMenu() {
+      const menu = document.getElementById('moreMenu');
+      if (!menu || !portalData) return;
+
+      const items = [
+        `<button class="more-item" onclick="goHome()">⌂ Home</button>`,
+        `<button class="more-item" onclick="showPage('phone')">☎ Phone Book</button>`,
+        `<button class="more-item" onclick="showPage('admin')">⚙ Admin</button>`
+      ];
+
+      (portalData.menu || []).forEach((section, idx) => {
+        items.push(`<button class="more-item" onclick="jumpToPortalSection(${idx})">• ${escapeHtml(section.title || '')}</button>`);
+      });
+
+      menu.innerHTML = items.join('');
+    }
+
+    function jumpToPortalSection(idx) {
+      pendingOpenSectionIndex = idx;
+      openMenus[idx] = true;
+      currentPage = 'portal';
+      closeMoreMenu();
+      setBottomNavActive();
+      render();
+      startSlider();
+
+      setTimeout(() => {
+        expandMenu(idx);
+        const el = document.getElementById('portal-section-' + idx);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    document.addEventListener('click', function(e) {
+      const moreBtn = document.getElementById('bottomMore');
+      const menu = document.getElementById('moreMenu');
+      if (!menu) return;
+      if (moreBtn && moreBtn.contains(e.target)) return;
+      if (menu.contains(e.target)) return;
+      closeMoreMenu();
+    });
+
+function init() {
+  startLoader();
+
+  if (window.lucide && lucide.createIcons) {
+    lucide.createIcons();
+  }
+
+  let portalDone = false;
+  let phoneDone = false;
+
+  function maybeFinish() {
+    if (portalDone) {
+      setBottomNavActive();
+      render();
+      startAutoRefresh();
+      if (adminToken) tryRestoreAdminSession();
+
+      if (window.lucide && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    }
+
+    if (portalDone && phoneDone) finishLoader();
+  }
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      const parsed = apiParse(res);
+      if (!parsed || parsed.ok !== true || !parsed.portal) {
+        showError(parsed && parsed.message ? parsed.message : 'Portal bootstrap failed');
+        finishLoader();
+        return;
+      }
+
+      portalData = parsed.portal;
+      applyThemeColor(parsed.portal && parsed.portal.settings ? parsed.portal.settings.ThemeColor : '#4F46E5');
+      lastPortalHash = stableHash(parsed.portal);
+      activityTickerHtml = buildTickerText();
+      buildMoreMenu();
+      portalDone = true;
+      setLoaderProgress(72, 'Rendering portal...');
+      maybeFinish();
+    })
+    .withFailureHandler(function() {
+      showError('Server call failed');
+      finishLoader();
+    })
+    .getPortalBootstrap();
+
+  google.script.run
+    .withSuccessHandler(function(dir) {
+      const parsedDir = apiParse(dir) || { ok: true, contacts: [] };
+      phoneData = parsedDir.contacts || [];
+      filteredPhoneData = phoneData.slice();
+      lastPhoneHash = stableHash(phoneData);
+      phoneDone = true;
+      setLoaderProgress(92, 'Loading phone book...');
+      maybeFinish();
+    })
+    .withFailureHandler(function() {
+      phoneData = [];
+      filteredPhoneData = [];
+      lastPhoneHash = stableHash(phoneData);
+      phoneDone = true;
+      setLoaderProgress(92, 'Phone book ready');
+      maybeFinish();
+    })
+    .getPhoneDirectory();
+
+  setTimeout(function () {
+    if (window.lucide && lucide.createIcons) {
+      lucide.createIcons();
+    }
+  }, 100);
+}
+    function startAutoRefresh() {
+      stopAutoRefresh();
+      autoRefreshTimer = setInterval(checkForUpdatesSilently, 12000);
+    }
+
+    function stopAutoRefresh() {
+      if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+      autoRefreshTimer = null;
+    }
+
+    function checkForUpdatesSilently() {
+      google.script.run.withSuccessHandler(function(res) {
+        const parsed = apiParse(res);
+        if (!parsed || !parsed.ok || !parsed.portal) return;
+
+        const newPortalHash = stableHash(parsed.portal);
+        if (newPortalHash !== lastPortalHash) {
+          portalData = parsed.portal;
+          applyThemeColor(parsed.portal && parsed.portal.settings ? parsed.portal.settings.ThemeColor : '#4F46E5');
+          lastPortalHash = newPortalHash;
+          activityTickerHtml = buildTickerText();
+          buildMoreMenu();
+          if (currentPage === 'portal') renderPortal();
+        }
+      }).getPortalBootstrap();
+
+      google.script.run.withSuccessHandler(function(res) {
+        const parsed = apiParse(res);
+        if (!parsed || !parsed.ok || !parsed.contacts) return;
+
+        const newPhoneHash = stableHash(parsed.contacts);
+        if (newPhoneHash !== lastPhoneHash) {
+          phoneData = parsed.contacts;
+          lastPhoneHash = newPhoneHash;
+          const q = currentSearch.trim().toLowerCase();
+          filteredPhoneData = phoneData.filter(function(c) {
+            return String(c.crewCode || '').toLowerCase().includes(q) ||
+                   String(c.name || '').toLowerCase().includes(q) ||
+                   String(c.number || '').toLowerCase().includes(q);
+          });
+          if (currentPage === 'phone') {
+            const container = document.getElementById('phoneListContainer');
+            const count = document.getElementById('phoneResultCount');
+            if (container) container.innerHTML = renderPhoneCardsHtml(filteredPhoneData);
+            if (count) count.textContent = filteredPhoneData.length + ' result' + (filteredPhoneData.length === 1 ? '' : 's');
+            if (window.lucide && lucide.createIcons) lucide.createIcons();
+          }
+        }
+      }).getPhoneDirectory();
+    }
+
+    function render() {
+      if (!portalData) {
+        document.getElementById('app').innerHTML = `<div class="soft-card p-3"><div class="fw-bold fs-4 mb-1">Loading...</div><div class="text-secondary">Please wait</div></div>`;
+        return;
+      }
+
+      if (currentPage === 'portal') renderPortal();
+      if (currentPage === 'phone') renderPhone();
+      if (currentPage === 'admin') renderAdmin();
+    }
+
+    function getCurrentSliderData() {
+      if (!portalData || !portalData.sliderSets) return [];
+      return portalData.sliderSets[sliderMode] || [];
+    }
+
+    function getCurrentSliderIndex() {
+      return sliderIndexes[sliderMode] || 0;
+    }
+
+    function setCurrentSliderIndex(v) {
+      sliderIndexes[sliderMode] = v;
+    }
+
+    function getLoopIndex(idx, len) {
+      if (!len) return 0;
+      return (idx + len) % len;
+    }
+
+    function getCardClass(index, current, len) {
+      const prev = getLoopIndex(current - 1, len);
+      const next = getLoopIndex(current + 1, len);
+      if (index === current) return 'current';
+      if (index === prev) return 'prev';
+      if (index === next) return 'next';
+      return 'hidden';
+    }
+
+
+    function getCardDirectionalClass(index, current, len) {
+      if (!len) return 'hidden-right';
+      const prev = getLoopIndex(current - 1, len);
+      const next = getLoopIndex(current + 1, len);
+      if (index === current) return 'current';
+      if (index === prev) return 'prev';
+      if (index === next) return 'next';
+      const distForward = (index - current + len) % len;
+      const distBackward = (current - index + len) % len;
+      return distBackward < distForward ? 'hidden-left' : 'hidden-right';
+    }
+
+    function initSliderDom() {
+      const stage = document.querySelector('.coverflow-stage');
+      if (!stage) return;
+      const cards = Array.from(stage.querySelectorAll('.cover-card'));
+      cards.forEach((card, idx) => {
+        card.dataset.index = String(idx);
+        card.className = 'cover-card ' + getCardDirectionalClass(idx, getCurrentSliderIndex(), cards.length);
+      });
+    }
+
+    function updateSliderDom(direction) {
+      const stage = document.querySelector('.coverflow-stage');
+      if (!stage) {
+        renderPortal();
+        return;
+      }
+      const cards = Array.from(stage.querySelectorAll('.cover-card'));
+      if (!cards.length) return;
+      const len = cards.length;
+      const current = getCurrentSliderIndex();
+      cards.forEach((card, idx) => {
+        const cls = getCardDirectionalClass(idx, current, len);
+        card.className = 'cover-card ' + cls;
+      });
+      const dotsWrap = document.querySelector('.dots');
+      if (dotsWrap) {
+        Array.from(dotsWrap.children).forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === current);
+        });
+      }
+    }
+
+    function switchSliderMode(mode) {
+      sliderMode = mode;
+      renderPortal();
+    }
+
+    function renderCCMonthShowcase(monthHistory) {
+      if (!monthHistory || !monthHistory.length) return '';
+
+      return `
+        <div class="ccm-accordion ${ccMonthShowcaseOpen ? 'open' : ''}" id="ccmAccordion">
+          <div class="ccm-accordion-head" onclick="toggleCCMonthShowcase()">
+            <div class="ccm-accordion-title">List of all CC of the Months</div>
+            <div class="ccm-accordion-chevron">⌄</div>
+          </div>
+
+          <div class="ccm-accordion-body" id="ccmAccordionBody" style="${ccMonthShowcaseOpen ? 'max-height:20000px;' : ''}">
+            ${monthHistory.map(function(monthBlock) {
+              const monthKey = 'm_' + String(monthBlock.month || '').replace(/[^A-Za-z0-9_-]/g, '');
+              const isOpen = openShowcaseMonth === monthKey;
+              return `
+                <div class="ccm-month-acc ${isOpen ? 'open' : ''}" id="ccmMonth_${monthKey}">
+                  <div class="ccm-month-acc-head" onclick="toggleShowcaseMonth('${escapeJs(monthKey)}')">
+                    <div class="ccm-month-acc-title">${escapeHtml(monthBlock.month || '')}</div>
+                    <div class="ccm-month-acc-right">
+                      <div class="ccm-month-acc-badge">TOP 5</div>
+                      <div class="ccm-month-acc-chevron">⌄</div>
+                    </div>
+                  </div>
+
+                  <div class="ccm-month-acc-body" id="ccmMonthBody_${monthKey}" style="${isOpen ? 'max-height:5000px;' : 'max-height:0;'}">
+                    <div class="ccm-list" style="padding:10px 12px 12px;">
+                      ${(monthBlock.items || []).map(function(item) {
+                        const photo = item.photoUrl ? escapeHtml(item.photoUrl) : '';
+                        const initials = escapeHtml((item.name || item.crewCode || '?').substring(0,1));
+                        return `
+                          <div class="ccm-item">
+                            <div class="ccm-item-left">
+                              <div class="ccm-rank">${escapeHtml(String(item.rank || ''))}</div>
+
+                              <div class="ccm-thumb">
+                                ${photo
+                                  ? `<img src="${photo}" loading="lazy" onerror="this.style.display='none'; this.parentNode.textContent='${initials}'">`
+                                  : initials}
+                              </div>
+
+                              <div class="ccm-meta">
+                                <div class="ccm-name">${escapeHtml(item.name || item.crewCode || '')}</div>
+                                <div class="ccm-code">${escapeHtml(item.crewCode || '')}</div>
+                              </div>
+                            </div>
+                          </div>
+                        `;
+                      }).join('')}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPortal() {
+      const p = portalData;
+      const sliderData = getCurrentSliderData();
+      const sliderIndex = getCurrentSliderIndex();
+
+      const cards = sliderData.map(function(c, idx) {
+        const cls = getCardClass(idx, sliderIndex, sliderData.length);
+        return `
+          <div class="cover-card ${cls}">
+            <div class="cover-content">
+              <div class="cover-photo">
+                ${c.photoUrl
+                  ? `<img src="${escapeHtml(addCacheBust(c.photoUrl))}" onerror="this.style.display='none'; this.parentNode.textContent='${escapeHtml((c.crewCode || 'CC').substring(0,2))}'">`
+                  : escapeHtml((c.crewCode || 'CC').substring(0,2))}
+              </div>
+              <div class="cover-rank">Top ${escapeHtml(String(c.rank || idx + 1))}</div>
+              <div class="cover-name">${escapeHtml(c.name || c.crewCode || '')}</div>
+              <div class="cover-caption">${escapeHtml(c.caption || '')}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const menuHtml = (p.menu || []).map(function(m, idx) {
+        return `
+          <div id="portal-section-${idx}" class="section-anchor mb-3">
+            <div class="soft-card menu-card ${openMenus[idx] ? 'open' : ''}" id="menuCard${idx}">
+              <div class="menu-head" onclick="toggleMenu(${idx})">
+                <div class="menu-title">${escapeHtml(m.title || '')}</div>
+                <div class="chevron">⌄</div>
+              </div>
+              <div class="menu-body" id="menuBody${idx}" style="${openMenus[idx] ? 'max-height:1200px;' : ''}">
+                ${(m.items || []).map(function(i, itemIdx) {
+                  const monthKey = idx + '_' + itemIdx;
+                  if (i.linkType === 'month-history') {
+                    return `
+                      <div class="menu-item" onclick="toggleMonthHistory('${monthKey}')">
+                        <div style="font-weight:700;font-size:12px;color:#596273">${escapeHtml(i.title || '')}</div>
+                        <span class="badge-soft">LIST</span>
+                      </div>
+                      <div class="month-mini-list" id="monthMini${monthKey}" style="display:${openMonthHistory[monthKey] ? 'block' : 'none'};">
+                        ${(i.historyItems || []).map(function(h) {
+                          return `
+                            <div class="month-mini-item">
+                              <div class="month-mini-rank">${escapeHtml(String(h.rank || ''))}</div>
+                              <div class="month-mini-name">${escapeHtml(h.crewCode || h.name || '')}</div>
+                            </div>
+                          `;
+                        }).join('')}
+                      </div>
+                    `;
+                  }
+
+                  return `
+                   <div class="menu-item" onclick="openItem('${escapeJs(i.linkType || '')}','${escapeJs(i.url || '')}','${escapeJs(i.title || '')}')">
+                      <div style="font-weight:700;font-size:12px;color:#596273">${escapeHtml(i.title || '')}</div>
+                      <span class="badge-soft">${escapeHtml(i.badge || 'LINK')}</span>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('app').innerHTML = `
+        <div class="floating-header-shell">
+          <div class="floating-header-wrap">
+            <div class="floating-header">
+              <div class="floating-header-left">
+                <div class="floating-header-badge">✦</div>
+                <div class="floating-header-text">
+                  <div class="floating-header-title">TMA Cabin Crew Portal</div>
+                  <div class="floating-header-sub">Reports, schedules, policies and quick crew access</div>
+                </div>
+              </div>
+              <div class="floating-header-status">
+                <span class="floating-header-dot"></span>
+                Crew Portal
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="soft-card p-3 mb-3" style="background:linear-gradient(135deg,#4F46E5 0%,#6366F1 100%); color:#fff; border:none; box-shadow:0 18px 36px rgba(79,70,229,.18);">
+          <div style="font-size:12px;font-weight:800;opacity:.9;">Welcome back</div>
+          <div style="font-size:22px;font-weight:900;line-height:1.15;margin-top:4px;">TMA Cabin Crew Portal</div>
+          <div style="font-size:13px;opacity:.92;margin-top:6px;">Reports, schedules, policies and quick crew access in one place</div>
+        </div>
+
+        ${(p.marqueee && p.marqueee.length) ? `
+  <div class="ticker-card mb-3">
+    <div class="ticker-label">Updated</div>
+    <div class="ticker-window">
+      <div class="ticker-track">
+        ${activityTickerHtml || buildTickerText()}
+        <span class="ticker-sep">•</span>
+        ${activityTickerHtml || buildTickerText()}
+      </div>
+    </div>
+  </div>
+` : ``}
+
+        <div class="section-label">Cabin Crews of the</div>
+        <div class="soft-card p-3 mb-3">
+          <div class="slider-switch">
+            <button class="slider-switch-btn ${sliderMode === 'ccMonth' ? 'active' : ''}" onclick="switchSliderMode('ccMonth')">Month</button>
+            <button class="slider-switch-btn ${sliderMode === 'ccYear' ? 'active' : ''}" onclick="switchSliderMode('ccYear')">Year</button>
+            <button class="slider-switch-btn ${sliderMode === 'topFlight' ? 'active' : ''}" onclick="switchSliderMode('topFlight')">FLT.Time</button>
+          </div>
+
+          <div class="coverflow-wrap"
+            ontouchstart="sliderTouchStart(event)"
+            ontouchmove="sliderTouchMove(event)"
+            ontouchend="sliderTouchEnd(event)"
+            onmousedown="sliderMouseDown(event)"
+            onmousemove="sliderMouseMove(event)"
+            onmouseup="sliderMouseUp(event)"
+            onmouseleave="sliderMouseLeave(event)">
+            <div class="coverflow-stage">
+              ${cards || '<div class="d-flex align-items-center justify-content-center h-100 text-secondary">No slider data found.</div>'}
+            </div>
+          </div>
+
+          <div class="coverflow-controls">
+            <button class="slider-arrow" onclick="prevSlide()">‹</button>
+            <div class="dots">
+              ${sliderData.map(function(_, idx) {
+                return `<div class="dot ${idx === sliderIndex ? 'active' : ''}" onclick="goToSlide(${idx})"></div>`;
+              }).join('')}
+            </div>
+            <button class="slider-arrow" onclick="nextSlide()">›</button>
+          </div>
+        </div>
+
+        ${menuHtml}
+        ${renderCCMonthShowcase(p.monthHistory || [])}
+
+        <div class="soft-card p-3">
+          <div class="d-flex justify-content-between mb-2">
+            <div class="small">Last updated</div>
+            <div class="small">${formatDateDisplay(p.settings.lastUpdated || '')}</div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="small">Support</div>
+            <div class="small">${escapeHtml(p.settings.contactText || '')}</div>
+          </div>
+        </div>
+
+        <div class="footer">Developed By <strong>AFKA</strong></div>
+      `;
+
+      if (pendingOpenSectionIndex !== null) {
+        expandMenu(pendingOpenSectionIndex);
+        pendingOpenSectionIndex = null;
+      }
+
+      initSliderDom();
+      startSlider();
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+      renderAnnouncementModal();
+    }
+
+    function buildTickerText() {
+      const parts = [];
+      const marqueeRows = (portalData && portalData.marqueee) ? portalData.marqueee : [];
+      marqueeRows.forEach(function(msg) {
+        const value = String(msg || '').trim();
+        if (value) parts.push(escapeHtml(value));
+      });
+      return parts.join('<span class="activity-sep">•</span>');
+    }
+
+    function renderAnnouncementModal() {
+      const existing = document.getElementById('announcementModal');
+      if (existing) existing.remove();
+
+      if (!portalData || !portalData.activeAnnouncement) return;
+
+      const ann = portalData.activeAnnouncement;
+      const title = escapeHtml(ann.Title || 'Announcement');
+      const message = escapeHtml(String(ann.Message || ''));
+      const modalHtml = `
+        <div class="announcement-modal show" id="announcementModal" onclick="closeAnnouncementModal(event)">
+          <div class="announcement-modal-card" onclick="event.stopPropagation()">
+            <div class="announcement-modal-chip">Announcement</div>
+            <div class="announcement-modal-title">${title}</div>
+            <p class="announcement-modal-text">${message}</p>
+            <div class="announcement-modal-actions">
+              <button class="announcement-close-btn" onclick="closeAnnouncementModal()">Close</button>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+
+    function closeAnnouncementModal(event) {
+      if (event && event.target && event.target.id !== 'announcementModal') return;
+      const modal = document.getElementById('announcementModal');
+      if (modal) modal.remove();
+    }
+
+    function startSlider() {
+      stopSlider();
+      const data = getCurrentSliderData();
+      if (!data || data.length <= 1) return;
+      sliderTimer = setInterval(function() { nextSlide(); }, 3200);
+    }
+
+    function stopSlider() {
+      if (sliderTimer) clearInterval(sliderTimer);
+      sliderTimer = null;
+    }
+
+    function nextSlide() {
+      const data = getCurrentSliderData();
+      if (!data || !data.length) return;
+      const idx = getCurrentSliderIndex();
+      setCurrentSliderIndex((idx + 1) % data.length);
+      updateSliderDom('next');
+    }
+
+    function prevSlide() {
+      const data = getCurrentSliderData();
+      if (!data || !data.length) return;
+      const idx = getCurrentSliderIndex();
+      setCurrentSliderIndex((idx - 1 + data.length) % data.length);
+      updateSliderDom('prev');
+    }
+
+    function goToSlide(idx) {
+      setCurrentSliderIndex(idx);
+      updateSliderDom('jump');
+    }
+
+    function sliderTouchStart(e) {
+      stopSlider();
+      sliderTouching = true;
+      sliderTouchStartX = e.touches[0].clientX;
+      sliderTouchCurrentX = sliderTouchStartX;
+    }
+
+    function sliderTouchMove(e) {
+      if (!sliderTouching) return;
+      sliderTouchCurrentX = e.touches[0].clientX;
+    }
+
+    function sliderTouchEnd() {
+      if (!sliderTouching) return;
+      const diff = sliderTouchCurrentX - sliderTouchStartX;
+      sliderTouching = false;
+      handleSwipeDiff(diff);
+    }
+
+    function sliderMouseDown(e) {
+      stopSlider();
+      sliderTouching = true;
+      sliderTouchStartX = e.clientX;
+      sliderTouchCurrentX = sliderTouchStartX;
+    }
+
+    function sliderMouseMove(e) {
+      if (!sliderTouching) return;
+      sliderTouchCurrentX = e.clientX;
+    }
+
+    function sliderMouseUp() {
+      if (!sliderTouching) return;
+      const diff = sliderTouchCurrentX - sliderTouchStartX;
+      sliderTouching = false;
+      handleSwipeDiff(diff);
+    }
+
+    function sliderMouseLeave() {
+      if (!sliderTouching) return;
+      const diff = sliderTouchCurrentX - sliderTouchStartX;
+      sliderTouching = false;
+      handleSwipeDiff(diff);
+    }
+
+    function handleSwipeDiff(diff) {
+      if (Math.abs(diff) > 40) {
+        if (diff < 0) nextSlide();
+        else prevSlide();
+      } else {
+        startSlider();
+      }
+    }
+
+    function collapseAllMenus(exceptIdx) {
+      Object.keys(openMenus).forEach(function(key) {
+        const idx = Number(key);
+        if (idx === exceptIdx) return;
+        openMenus[idx] = false;
+        const body = document.getElementById('menuBody' + idx);
+        const wrapper = document.getElementById('menuCard' + idx);
+        if (body) body.style.maxHeight = '0px';
+        if (wrapper) wrapper.classList.remove('open');
+      });
+    }
+
+    function toggleMenu(idx) {
+      const body = document.getElementById('menuBody' + idx);
+      const wrapper = document.getElementById('menuCard' + idx);
+      if (!body || !wrapper) return;
+
+      const shouldOpen = !openMenus[idx];
+      collapseAllMenus(shouldOpen ? idx : null);
+      openMenus[idx] = shouldOpen;
+
+      if (shouldOpen) {
+        wrapper.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      } else {
+        wrapper.classList.remove('open');
+        body.style.maxHeight = '0px';
+      }
+    }
+
+    function expandMenu(idx) {
+      collapseAllMenus(idx);
+      openMenus[idx] = true;
+      const body = document.getElementById('menuBody' + idx);
+      const wrapper = document.getElementById('menuCard' + idx);
+      if (!body || !wrapper) return;
+      wrapper.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+
+    function toggleMonthHistory(key) {
+      const isOpening = !openMonthHistory[key];
+
+      Object.keys(openMonthHistory).forEach(function(k) {
+        openMonthHistory[k] = false;
+        const el = document.getElementById('monthMini' + k);
+        if (el) el.style.display = 'none';
+      });
+
+      openMonthHistory[key] = isOpening;
+
+      const current = document.getElementById('monthMini' + key);
+      if (current) current.style.display = isOpening ? 'block' : 'none';
+
+      const openMenuBody = Object.keys(openMenus).find(function(k) { return openMenus[k]; });
+      if (openMenuBody !== undefined) {
+        const body = document.getElementById('menuBody' + openMenuBody);
+        if (body) {
+          setTimeout(function() {
+            body.style.maxHeight = body.scrollHeight + 'px';
+          }, 60);
+        }
+      }
+    }
+
+    function toggleCCMonthShowcase() {
+      ccMonthShowcaseOpen = !ccMonthShowcaseOpen;
+
+      const wrap = document.getElementById('ccmAccordion');
+      const body = document.getElementById('ccmAccordionBody');
+      if (!wrap || !body) {
+        renderPortal();
+        return;
+      }
+
+      wrap.classList.toggle('open', ccMonthShowcaseOpen);
+      body.style.maxHeight = ccMonthShowcaseOpen ? '20000px' : '0px';
+    }
+
+    function toggleShowcaseMonth(month) {
+      if (!ccMonthShowcaseOpen) ccMonthShowcaseOpen = true;
+
+      openShowcaseMonth = (openShowcaseMonth === month) ? '' : month;
+
+      const monthBodies = document.querySelectorAll('[id^="ccmMonthBody_"]');
+      const monthCards = document.querySelectorAll('.ccm-month-acc');
+
+      monthBodies.forEach(function(body) {
+        body.style.maxHeight = '0px';
+      });
+
+      monthCards.forEach(function(card) {
+        card.classList.remove('open');
+      });
+
+      if (openShowcaseMonth) {
+        const activeBody = document.getElementById('ccmMonthBody_' + openShowcaseMonth);
+        const activeCard = document.getElementById('ccmMonth_' + openShowcaseMonth);
+        if (activeBody) activeBody.style.maxHeight = '5000px';
+        if (activeCard) activeCard.classList.add('open');
+      }
+
+      const mainBody = document.getElementById('ccmAccordionBody');
+      if (mainBody && ccMonthShowcaseOpen) {
+        setTimeout(function() {
+          mainBody.style.maxHeight = '20000px';
+        }, 60);
+      }
+    }
+
+    let currentPreviewUrl = '';
+let currentPreviewTitle = 'Preview';
+
+function canPreviewInModal(url) {
+  if (!url) return false;
+
+  const u = url.toLowerCase();
+
+  return (
+    u.includes('drive.google.com/file/d/') ||
+    u.includes('docs.google.com/document/d/') ||
+    u.includes('docs.google.com/spreadsheets/d/') ||
+    u.includes('docs.google.com/presentation/d/') ||
+    u.includes('docs.google.com/forms/d/') ||
+    u.endsWith('.pdf') ||
+    /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(u)
+  );
+}
+
+function getPreviewUrl(url) {
+  if (!url) return '';
+
+  let match = url.match(/https:\/\/drive\.google\.com\/file\/d\/([^\/]+)/i);
+  if (match) return 'https://drive.google.com/file/d/' + match[1] + '/preview';
+
+  match = url.match(/https:\/\/docs\.google\.com\/document\/d\/([^\/]+)/i);
+  if (match) return 'https://docs.google.com/document/d/' + match[1] + '/preview';
+
+  match = url.match(/https:\/\/docs\.google\.com\/spreadsheets\/d\/([^\/]+)/i);
+  if (match) return 'https://docs.google.com/spreadsheets/d/' + match[1] + '/preview';
+
+  match = url.match(/https:\/\/docs\.google\.com\/presentation\/d\/([^\/]+)/i);
+  if (match) return 'https://docs.google.com/presentation/d/' + match[1] + '/preview';
+
+  match = url.match(/https:\/\/docs\.google\.com\/forms\/d\/([^\/]+)/i);
+  if (match) return 'https://docs.google.com/forms/d/' + match[1] + '/viewform';
+
+  return url;
+}
+
+function openExternalInNewTab(url) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+function showDocPreview(url, title) {
+  const previewUrl = getPreviewUrl(url);
+  if (!previewUrl) {
+    showToast('Link not added yet.');
+    return;
+  }
+
+  currentPreviewUrl = previewUrl;
+  currentPreviewTitle = title || 'Preview';
+
+  document.getElementById('docPreviewFrame').src = previewUrl;
+  document.getElementById('docModalSubtitle').textContent = currentPreviewTitle;
+  document.getElementById('docModal').classList.add('show');
+  document.body.classList.add('modal-open');
+}
+
+function closeDocPreview() {
+  document.getElementById('docModal').classList.remove('show');
+  document.getElementById('docPreviewFrame').src = '';
+  document.body.classList.remove('modal-open');
+}
+
+function openDocInNewTab() {
+  if (!currentPreviewUrl) return;
+  openExternalInNewTab(currentPreviewUrl);
+}
+
+function openItem(linkType, url, title) {
+  if (linkType === 'internal' && (url === 'phone-book' || url === 'phone-directory')) {
+    showPage('phone');
+    return;
+  }
+
+  if (!url) {
+    showToast('Link not added yet.');
+    return;
+  }
+
+  if (canPreviewInModal(url)) {
+    showDocPreview(url, title || 'Document');
+  } else {
+    openExternalInNewTab(url);
+  }
+}
+
+    function renderPhone() {
+      document.getElementById('app').innerHTML = `
+        <div class="search-wrap phone-search-shell">
+          <div class="soft-card phone-search-card mb-2">
+            <div class="fw-bold" style="font-size:22px; letter-spacing:-0.02em; text-shadow:0 .25px 0 rgba(17,24,39,.35)">Phone Book</div>
+            <div class="text-secondary small">Search by crew code, name, or number</div>
+            <input id="phoneSearchInput" class="phone-search-input mt-3" placeholder="Search phone book..." value="${escapeHtml(currentSearch)}">
+            <div class="mt-2">
+              <span class="status" id="phoneResultCount">${(filteredPhoneData || []).length} result${(filteredPhoneData || []).length === 1 ? '' : 's'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="phoneListContainer">${renderPhoneCardsHtml(filteredPhoneData)}</div>
+        <div class="footer">Developed By <strong>AFKA</strong></div>
+      `;
+
+      const input = document.getElementById('phoneSearchInput');
+      if (input) {
+        input.addEventListener('input', function() {
+          currentSearch = this.value || '';
+          debounceSearch(applyPhoneSearch);
+        });
+      }
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    }
+
+    function renderPhoneCardsHtml(list) {
+      if (!list || !list.length) {
+        return `<div class="soft-card p-3"><div class="text-secondary">No contacts found.</div></div>`;
+      }
+
+      return list.map(function(c) {
+        const imgSrc = escapeHtml(addCacheBust(c.photoUrl || ''));
+        const rawNum = sanitizePhoneNumber(c.number || '');
+        const smsNum = rawNum;
+        const telNum = rawNum;
+        return `
+          <div class="phone-card">
+            <div class="phone-main">
+              <div class="avatar">
+                ${c.photoUrl
+                  ? `<img src="${imgSrc}" loading="lazy" onerror="this.style.display='none'; this.parentNode.textContent='${escapeHtml((c.name || c.crewCode || '?').substring(0,1))}'">`
+                  : escapeHtml((c.name || c.crewCode || '?').substring(0,1))}
+              </div>
+              <div class="phone-meta">
+                <div class="phone-code">${escapeHtml(c.crewCode || '')}</div>
+                <div class="phone-name">${escapeHtml(c.name || '')}</div>
+                <div class="phone-number">${escapeHtml(c.number || '')}</div>
+              </div>
+            </div>
+            <div class="phone-actions">
+              <a class="action-icon msg" href="sms:${smsNum}" aria-label="Message">
+                <i data-lucide="message-circle"></i>
+              </a>
+              <a class="action-icon call-btn" href="tel:${telNum}" onclick="window.location.href='tel:${telNum}'; return true;" aria-label="Call">
+                <i data-lucide="phone"></i>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function applyPhoneSearch() {
+      const q = currentSearch.trim().toLowerCase();
+      filteredPhoneData = phoneData.filter(function(c) {
+        return String(c.crewCode || '').toLowerCase().includes(q) ||
+               String(c.name || '').toLowerCase().includes(q) ||
+               String(c.number || '').toLowerCase().includes(q);
+      });
+
+      const container = document.getElementById('phoneListContainer');
+      const count = document.getElementById('phoneResultCount');
+      if (container) container.innerHTML = renderPhoneCardsHtml(filteredPhoneData);
+      if (count) count.textContent = filteredPhoneData.length + ' result' + (filteredPhoneData.length === 1 ? '' : 's');
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    }
+
+    function addCacheBust(url) {
+      if (!url) return '';
+      const sep = url.indexOf('?') === -1 ? '?' : '&';
+      return url;
+    }
+
+    function renderAdmin() {
+      if (!adminToken || !adminData) {
+        renderAdminLogin();
+        return;
+      }
+
+      document.getElementById('app').innerHTML = `
+        <div class="soft-card p-3 mb-3">
+          <div class="fw-bold fs-4">Admin Dashboard</div>
+          <div class="text-secondary small">Welcome ${escapeHtml(adminData.user.username || '')}</div>
+        </div>
+
+        ${renderAdminSettings()}
+        ${renderAdminAnnouncements()}
+        ${renderAdminMarqueee()}
+        ${renderAdminCCMonth()}
+        ${renderAdminCCYear()}
+        ${renderAdminTopFlight()}
+        ${renderAdminMenu()}
+        ${renderAdminReports()}
+        ${renderAdminBusSchedule()}
+        ${renderAdminImportantLinks()}
+        ${renderAdminPhoneBook()}
+
+        <div class="soft-card p-3">
+          <div class="toolbar">
+            <button class="pill primary" onclick="saveAllAdmin()">Save All Changes</button>
+            <button class="pill secondary" onclick="reloadAdminData()">Reload</button>
+            <button class="pill ghost" onclick="logoutAdmin()">Logout</button>
+          </div>
+        </div>
+
+        <div class="footer">Developed By <strong>AFKA</strong></div>
+      `;
+    }
+
+    function renderAdminLogin() {
+      document.getElementById('app').innerHTML = `
+        <div class="soft-card p-3">
+          <div class="fw-bold fs-4">Admin Login</div>
+          <div class="text-secondary small mb-3">Settings stay hidden until login succeeds.</div>
+          <div class="row g-2">
+            <div class="col-12"><input id="adminUser" class="touch-input" placeholder="Username" value="admin"></div>
+            <div class="col-12"><input id="adminPass" class="touch-input" type="password" placeholder="Password"></div>
+          </div>
+          <div class="toolbar mt-3">
+            <button class="pill primary" onclick="adminLogin()">Login</button>
+          </div>
+          <div id="adminMsg" class="small mt-2"></div>
+        </div>
+        <div class="footer">Developed By <strong>AFKA</strong></div>
+      `;
+    }
+
+    function adminLogin() {
+      const username = document.getElementById('adminUser').value;
+      const password = document.getElementById('adminPass').value;
+
+      google.script.run.withSuccessHandler(function(res) {
+        const parsed = apiParse(res);
+        if (!parsed || !parsed.ok) {
+          document.getElementById('adminMsg').textContent = parsed && parsed.message ? parsed.message : 'Login failed';
+          return;
+        }
+        adminToken = parsed.token || '';
+        localStorage.setItem('tma_admin_token', adminToken);
+        showToast('Login successful');
+        currentPage = 'admin';
+        setBottomNavActive();
+        loadAdminDashboard();
+      }).withFailureHandler(function() {
+        document.getElementById('adminMsg').textContent = 'Server error';
+      }).loginAdmin(username, password);
+    }
+
+    function logoutAdmin() {
+      const token = adminToken;
+      adminToken = '';
+      adminData = null;
+      localStorage.removeItem('tma_admin_token');
+
+      google.script.run.withSuccessHandler(function() {
+        showToast('Logged out');
+        renderAdminLogin();
+      }).withFailureHandler(function() {
+        renderAdminLogin();
+      }).logoutAdmin(token);
+    }
+
+    function tryRestoreAdminSession() {
+      google.script.run.withSuccessHandler(function(res) {
+        const parsed = apiParse(res);
+        if (parsed && parsed.ok) loadAdminDashboard();
+        else {
+          adminToken = '';
+          adminData = null;
+          localStorage.removeItem('tma_admin_token');
+        }
+      }).validateAdminSession(adminToken);
+    }
+
+    function loadAdminDashboard() {
+      google.script.run.withSuccessHandler(function(res) {
+        const parsed = apiParse(res);
+        if (!parsed || !parsed.ok || !parsed.data) {
+          showToast(parsed && parsed.message ? parsed.message : 'Failed to load admin data');
+          adminToken = '';
+          adminData = null;
+          localStorage.removeItem('tma_admin_token');
+          renderAdminLogin();
+          return;
+        }
+        adminData = parsed.data;
+        if (currentPage === 'admin') renderAdmin();
+      }).withFailureHandler(function() {
+        showToast('Failed to load admin data');
+      }).getAdminDashboard(adminToken);
+    }
+
+    function reloadAdminData() {
+      loadAdminDashboard();
+      showToast('Reloaded');
+    }
+
+    function renderAdminSettings() {
+      const s = adminData.settings || {};
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">General Settings</div>
+            <span class="status">Portal</span>
+          </div>
+          <div class="row g-2">
+            <div class="col-12"><input class="touch-input" id="setPortalTitle" placeholder="Portal title" value="${escapeHtml(s.PortalTitle || '')}"></div>
+            <div class="col-12"><input class="touch-input" id="setSubtitle" placeholder="Subtitle" value="${escapeHtml(s.Subtitle || '')}"></div>
+            <div class="col-12"><input class="touch-input" id="setContactText" placeholder="Contact text" value="${escapeHtml(s.ContactText || '')}"></div>
+            <div class="col-12"><input class="touch-input" id="setLogoUrl" placeholder="Logo URL" value="${escapeHtml(s.LogoURL || '')}"></div>
+            <div class="col-12"><input class="touch-input" id="setThemeColor" placeholder="Theme color" value="${escapeHtml(s.ThemeColor || '#4F46E5')}"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminAnnouncements() {
+      const items = adminData.announcements || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">Announcement Management</div>
+            <button class="pill secondary" onclick="addAnnouncement()">Add</button>
+          </div>
+          <div id="announcementList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-6"><input class="touch-input ann-id" placeholder="ID" value="${escapeHtml(item.ID || '')}"></div>
+                  <div class="col-6"><input class="touch-input ann-sort" placeholder="SortOrder" value="${escapeHtml(item.SortOrder || '')}"></div>
+                  <div class="col-12"><input class="touch-input ann-title" placeholder="Title" value="${escapeHtml(item.Title || '')}"></div>
+                  <div class="col-12"><textarea class="touch-textarea ann-message" placeholder="Message">${escapeHtml(item.Message || '')}</textarea></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <label class="small"><input type="checkbox" class="ann-active" ${toChecked(item.Active)}> Active</label>
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminMarqueee() {
+      const items = adminData.marqueee || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">Marqueee Messages</div>
+            <button class="pill secondary" onclick="addMarqueeeItem()">Add</button>
+          </div>
+          <div id="marqueeeList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-4"><input class="touch-input mq-id" placeholder="ID" value="${escapeHtml(item.ID || '')}"></div>
+                  <div class="col-4"><input class="touch-input mq-sort" placeholder="SortOrder" value="${escapeHtml(item.SortOrder || '')}"></div>
+                  <div class="col-12"><input class="touch-input mq-message" placeholder="Message" value="${escapeHtml(item.Message || '')}"></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <label class="small"><input type="checkbox" class="mq-active" ${toChecked(item.Active)}> Active</label>
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminCCMonth() {
+      const items = adminData.ccMonth || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">CC of the Month</div>
+            <button class="pill secondary" onclick="addCCMonthItem()">Add</button>
+          </div>
+          <div id="ccMonthList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-4"><input class="touch-input ccm-rank" placeholder="Rank" value="${escapeHtml(item.Rank || '')}"></div>
+                  <div class="col-4"><input class="touch-input ccm-month" placeholder="Month" value="${escapeHtml(item.Month || '')}"></div>
+                  <div class="col-4"><input class="touch-input ccm-code" placeholder="CrewCode" value="${escapeHtml(item.CrewCode || '')}"></div>
+                  <div class="col-12"><input class="touch-input ccm-caption" placeholder="Caption" value="${escapeHtml(item.Caption || '')}"></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <label class="small"><input type="checkbox" class="ccm-active" ${toChecked(item.Active)}> Active</label>
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminCCYear() {
+      const items = adminData.ccYear || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">CC of the Year</div>
+            <button class="pill secondary" onclick="addCCYearItem()">Add</button>
+          </div>
+          <div id="ccYearList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-4"><input class="touch-input ccy-rank" placeholder="Rank" value="${escapeHtml(item.Rank || '')}"></div>
+                  <div class="col-8"><input class="touch-input ccy-code" placeholder="CrewCode" value="${escapeHtml(item.CrewCode || '')}"></div>
+                  <div class="col-12"><input class="touch-input ccy-caption" placeholder="Caption" value="${escapeHtml(item.Caption || '')}"></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <label class="small"><input type="checkbox" class="ccy-active" ${toChecked(item.Active)}> Active</label>
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminTopFlight() {
+      const items = adminData.topFlight || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">Top FLT.Time Monthly</div>
+            <button class="pill secondary" onclick="addTopFlightItem()">Add</button>
+          </div>
+          <div id="topFlightList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-4"><input class="touch-input tft-rank" placeholder="Rank" value="${escapeHtml(item.Rank || '')}"></div>
+                  <div class="col-8"><input class="touch-input tft-code" placeholder="CrewCode" value="${escapeHtml(item.CrewCode || '')}"></div>
+                  <div class="col-12"><input class="touch-input tft-caption" placeholder="Caption" value="${escapeHtml(item.Caption || '')}"></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <label class="small"><input type="checkbox" class="tft-active" ${toChecked(item.Active)}> Active</label>
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminMenu() {
+      const items = adminData.menu || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">Menu and Submenu Management</div>
+            <button class="pill secondary" onclick="addMenuItem()">Add</button>
+          </div>
+          <div id="menuList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-12"><input class="touch-input menu-main" placeholder="Main menu" value="${escapeHtml(item.MainMenu || '')}"></div>
+                  <div class="col-12"><input class="touch-input menu-sub" placeholder="Sub menu" value="${escapeHtml(item.SubMenu || '')}"></div>
+                  <div class="col-12"><select class="touch-select menu-type">${selectOptions(['url','report','bus','internal'], item.LinkType || 'url')}</select></div>
+                  <div class="col-12"><input class="touch-input menu-url" placeholder="URL or internal key" value="${escapeHtml(item.URL || '')}"></div>
+                  <div class="col-6"><input class="touch-input menu-sort" placeholder="SortOrder" value="${escapeHtml(item.SortOrder || '')}"></div>
+                  <div class="col-6 d-flex align-items-center"><label class="small"><input type="checkbox" class="menu-active" ${toChecked(item.Active)}> Active</label></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminReports() {
+      const items = adminData.reports || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">Monthly Reports 2026</div>
+            <button class="pill secondary" onclick="addReportItem()">Add</button>
+          </div>
+          <div id="reportList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-6"><input class="touch-input rep-month" placeholder="Month" value="${escapeHtml(item.Month || '')}"></div>
+                  <div class="col-6"><input class="touch-input rep-title" placeholder="Title" value="${escapeHtml(item.Title || '')}"></div>
+                  <div class="col-12"><input class="touch-input rep-url" placeholder="URL" value="${escapeHtml(item.URL || '')}"></div>
+                  <div class="col-6"><input class="touch-input rep-status" placeholder="Status" value="${escapeHtml(item.Status || '')}"></div>
+                  <div class="col-6"><input class="touch-input rep-sort" placeholder="SortOrder" value="${escapeHtml(item.SortOrder || '')}"></div>
+                  <div class="col-12"><label class="small"><input type="checkbox" class="rep-active" ${toChecked(item.Active)}> Active</label></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminBusSchedule() {
+      const items = adminData.busSchedule || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">Bus Schedule Management</div>
+            <button class="pill secondary" onclick="addBusItem()">Add</button>
+          </div>
+          <div id="busList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-6"><input class="touch-input bus-type" placeholder="Type" value="${escapeHtml(item.Type || '')}"></div>
+                  <div class="col-6"><input class="touch-input bus-title" placeholder="Title" value="${escapeHtml(item.Title || '')}"></div>
+                  <div class="col-12"><input class="touch-input bus-url" placeholder="URL" value="${escapeHtml(item.URL || '')}"></div>
+                  <div class="col-12"><label class="small"><input type="checkbox" class="bus-active" ${toChecked(item.Active)}> Active</label></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminImportantLinks() {
+      const items = adminData.importantLinks || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">Important Links Management</div>
+            <button class="pill secondary" onclick="addLinkItem()">Add</button>
+          </div>
+          <div id="linkList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-6"><input class="touch-input link-id" placeholder="ID" value="${escapeHtml(item.ID || '')}"></div>
+                  <div class="col-6"><input class="touch-input link-title" placeholder="Title" value="${escapeHtml(item.Title || '')}"></div>
+                  <div class="col-12"><input class="touch-input link-url" placeholder="URL" value="${escapeHtml(item.URL || '')}"></div>
+                  <div class="col-6"><input class="touch-input link-icon" placeholder="Icon" value="${escapeHtml(item.Icon || '')}"></div>
+                  <div class="col-6"><input class="touch-input link-sort" placeholder="SortOrder" value="${escapeHtml(item.SortOrder || '')}"></div>
+                  <div class="col-12"><label class="small"><input type="checkbox" class="link-active" ${toChecked(item.Active)}> Active</label></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdminPhoneBook() {
+      const items = adminData.phone || [];
+      return `
+        <div class="soft-card p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="fw-bold">Phone Book Management</div>
+            <button class="pill secondary" onclick="addPhoneItem()">Add</button>
+          </div>
+          <div id="phoneList" class="repeat-list">
+            ${items.map(item => `
+              <div class="repeat-item">
+                <div class="row g-2">
+                  <div class="col-6"><input class="touch-input ph-code" placeholder="CrewCode" value="${escapeHtml(item.CrewCode || '')}"></div>
+                  <div class="col-6"><input class="touch-input ph-name" placeholder="Name" value="${escapeHtml(item.Name || '')}"></div>
+                  <div class="col-12"><input class="touch-input ph-number" placeholder="Number" value="${escapeHtml(item.Number || '')}"></div>
+                  <div class="col-12"><input class="touch-input ph-photo" placeholder="PhotoURL" value="${escapeHtml(item.PhotoURL || '')}"></div>
+                </div>
+                <div class="toolbar mt-2">
+                  <button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function addAnnouncement() {
+      addHtml('announcementList', `<div class="repeat-item"><div class="row g-2"><div class="col-6"><input class="touch-input ann-id" placeholder="ID" value=""></div><div class="col-6"><input class="touch-input ann-sort" placeholder="SortOrder" value=""></div><div class="col-12"><input class="touch-input ann-title" placeholder="Title" value=""></div><div class="col-12"><textarea class="touch-textarea ann-message" placeholder="Message"></textarea></div></div><div class="toolbar mt-2"><label class="small"><input type="checkbox" class="ann-active" checked> Active</label><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addMarqueeeItem() {
+      addHtml('marqueeeList', `<div class="repeat-item"><div class="row g-2"><div class="col-4"><input class="touch-input mq-id" placeholder="ID" value=""></div><div class="col-4"><input class="touch-input mq-sort" placeholder="SortOrder" value=""></div><div class="col-12"><input class="touch-input mq-message" placeholder="Message" value=""></div></div><div class="toolbar mt-2"><label class="small"><input type="checkbox" class="mq-active" checked> Active</label><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addCCMonthItem() {
+      addHtml('ccMonthList', `<div class="repeat-item"><div class="row g-2"><div class="col-4"><input class="touch-input ccm-rank" placeholder="Rank" value=""></div><div class="col-4"><input class="touch-input ccm-month" placeholder="Month" value=""></div><div class="col-4"><input class="touch-input ccm-code" placeholder="CrewCode" value=""></div><div class="col-12"><input class="touch-input ccm-caption" placeholder="Caption" value=""></div></div><div class="toolbar mt-2"><label class="small"><input type="checkbox" class="ccm-active" checked> Active</label><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addCCYearItem() {
+      addHtml('ccYearList', `<div class="repeat-item"><div class="row g-2"><div class="col-4"><input class="touch-input ccy-rank" placeholder="Rank" value=""></div><div class="col-8"><input class="touch-input ccy-code" placeholder="CrewCode" value=""></div><div class="col-12"><input class="touch-input ccy-caption" placeholder="Caption" value=""></div></div><div class="toolbar mt-2"><label class="small"><input type="checkbox" class="ccy-active" checked> Active</label><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addTopFlightItem() {
+      addHtml('topFlightList', `<div class="repeat-item"><div class="row g-2"><div class="col-4"><input class="touch-input tft-rank" placeholder="Rank" value=""></div><div class="col-8"><input class="touch-input tft-code" placeholder="CrewCode" value=""></div><div class="col-12"><input class="touch-input tft-caption" placeholder="Caption" value=""></div></div><div class="toolbar mt-2"><label class="small"><input type="checkbox" class="tft-active" checked> Active</label><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addMenuItem() {
+      addHtml('menuList', `<div class="repeat-item"><div class="row g-2"><div class="col-12"><input class="touch-input menu-main" placeholder="Main menu" value=""></div><div class="col-12"><input class="touch-input menu-sub" placeholder="Sub menu" value=""></div><div class="col-12"><select class="touch-select menu-type">${selectOptions(['url','report','bus','internal'], 'url')}</select></div><div class="col-12"><input class="touch-input menu-url" placeholder="URL or internal key" value=""></div><div class="col-6"><input class="touch-input menu-sort" placeholder="SortOrder" value=""></div><div class="col-6 d-flex align-items-center"><label class="small"><input type="checkbox" class="menu-active" checked> Active</label></div></div><div class="toolbar mt-2"><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addReportItem() {
+      addHtml('reportList', `<div class="repeat-item"><div class="row g-2"><div class="col-6"><input class="touch-input rep-month" placeholder="Month" value=""></div><div class="col-6"><input class="touch-input rep-title" placeholder="Title" value=""></div><div class="col-12"><input class="touch-input rep-url" placeholder="URL" value=""></div><div class="col-6"><input class="touch-input rep-status" placeholder="Status" value=""></div><div class="col-6"><input class="touch-input rep-sort" placeholder="SortOrder" value=""></div><div class="col-12"><label class="small"><input type="checkbox" class="rep-active" checked> Active</label></div></div><div class="toolbar mt-2"><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addBusItem() {
+      addHtml('busList', `<div class="repeat-item"><div class="row g-2"><div class="col-6"><input class="touch-input bus-type" placeholder="Type" value=""></div><div class="col-6"><input class="touch-input bus-title" placeholder="Title" value=""></div><div class="col-12"><input class="touch-input bus-url" placeholder="URL" value=""></div><div class="col-12"><label class="small"><input type="checkbox" class="bus-active" checked> Active</label></div></div><div class="toolbar mt-2"><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addLinkItem() {
+      addHtml('linkList', `<div class="repeat-item"><div class="row g-2"><div class="col-6"><input class="touch-input link-id" placeholder="ID" value=""></div><div class="col-6"><input class="touch-input link-title" placeholder="Title" value=""></div><div class="col-12"><input class="touch-input link-url" placeholder="URL" value=""></div><div class="col-6"><input class="touch-input link-icon" placeholder="Icon" value=""></div><div class="col-6"><input class="touch-input link-sort" placeholder="SortOrder" value=""></div><div class="col-12"><label class="small"><input type="checkbox" class="link-active" checked> Active</label></div></div><div class="toolbar mt-2"><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addPhoneItem() {
+      addHtml('phoneList', `<div class="repeat-item"><div class="row g-2"><div class="col-6"><input class="touch-input ph-code" placeholder="CrewCode" value=""></div><div class="col-6"><input class="touch-input ph-name" placeholder="Name" value=""></div><div class="col-12"><input class="touch-input ph-number" placeholder="Number" value=""></div><div class="col-12"><input class="touch-input ph-photo" placeholder="PhotoURL" value=""></div></div><div class="toolbar mt-2"><button class="pill ghost" onclick="removeRepeatItem(this)">Remove</button></div></div>`);
+    }
+
+    function addHtml(id, html) {
+      const el = document.getElementById(id);
+      if (el) el.insertAdjacentHTML('beforeend', html);
+    }
+
+    function removeRepeatItem(btn) {
+      const item = btn.closest('.repeat-item');
+      if (item) item.remove();
+    }
+
+    function collectAdminPayload() {
+      const settings = {
+        PortalTitle: val('setPortalTitle'),
+        Subtitle: val('setSubtitle'),
+        ContactText: val('setContactText'),
+        LogoURL: val('setLogoUrl'),
+        ThemeColor: val('setThemeColor'),
+        LastUpdated: ''
+      };
+
+      const announcements = [...document.querySelectorAll('#announcementList .repeat-item')].map(item => ({
+        ID: item.querySelector('.ann-id')?.value || '',
+        Title: item.querySelector('.ann-title')?.value || '',
+        Message: item.querySelector('.ann-message')?.value || '',
+        Active: item.querySelector('.ann-active')?.checked || false,
+        SortOrder: Number(item.querySelector('.ann-sort')?.value || 0)
+      }));
+
+      const marqueee = [...document.querySelectorAll('#marqueeeList .repeat-item')].map(item => ({
+        ID: item.querySelector('.mq-id')?.value || '',
+        Message: item.querySelector('.mq-message')?.value || '',
+        Active: item.querySelector('.mq-active')?.checked || false,
+        SortOrder: Number(item.querySelector('.mq-sort')?.value || 0)
+      }));
+
+      const ccMonth = [...document.querySelectorAll('#ccMonthList .repeat-item')].map(item => ({
+        Rank: Number(item.querySelector('.ccm-rank')?.value || 0),
+        Month: item.querySelector('.ccm-month')?.value || '',
+        CrewCode: item.querySelector('.ccm-code')?.value || '',
+        Caption: item.querySelector('.ccm-caption')?.value || '',
+        Active: item.querySelector('.ccm-active')?.checked || false
+      }));
+
+      const ccYear = [...document.querySelectorAll('#ccYearList .repeat-item')].map(item => ({
+        Rank: Number(item.querySelector('.ccy-rank')?.value || 0),
+        CrewCode: item.querySelector('.ccy-code')?.value || '',
+        Caption: item.querySelector('.ccy-caption')?.value || '',
+        Active: item.querySelector('.ccy-active')?.checked || false
+      }));
+
+      const topFlight = [...document.querySelectorAll('#topFlightList .repeat-item')].map(item => ({
+        Rank: Number(item.querySelector('.tft-rank')?.value || 0),
+        CrewCode: item.querySelector('.tft-code')?.value || '',
+        Caption: item.querySelector('.tft-caption')?.value || '',
+        Active: item.querySelector('.tft-active')?.checked || false
+      }));
+
+      const menu = [...document.querySelectorAll('#menuList .repeat-item')].map(item => ({
+        MainMenu: item.querySelector('.menu-main')?.value || '',
+        SubMenu: item.querySelector('.menu-sub')?.value || '',
+        LinkType: item.querySelector('.menu-type')?.value || 'url',
+        URL: item.querySelector('.menu-url')?.value || '',
+        SortOrder: Number(item.querySelector('.menu-sort')?.value || 0),
+        Active: item.querySelector('.menu-active')?.checked || false
+      }));
+
+      const reports = [...document.querySelectorAll('#reportList .repeat-item')].map(item => ({
+        Month: item.querySelector('.rep-month')?.value || '',
+        Title: item.querySelector('.rep-title')?.value || '',
+        URL: item.querySelector('.rep-url')?.value || '',
+        Status: item.querySelector('.rep-status')?.value || '',
+        SortOrder: Number(item.querySelector('.rep-sort')?.value || 0),
+        Active: item.querySelector('.rep-active')?.checked || false
+      }));
+
+      const busSchedule = [...document.querySelectorAll('#busList .repeat-item')].map(item => ({
+        Type: item.querySelector('.bus-type')?.value || '',
+        Title: item.querySelector('.bus-title')?.value || '',
+        URL: item.querySelector('.bus-url')?.value || '',
+        Active: item.querySelector('.bus-active')?.checked || false
+      }));
+
+      const importantLinks = [...document.querySelectorAll('#linkList .repeat-item')].map(item => ({
+        ID: item.querySelector('.link-id')?.value || '',
+        Title: item.querySelector('.link-title')?.value || '',
+        URL: item.querySelector('.link-url')?.value || '',
+        SortOrder: Number(item.querySelector('.link-sort')?.value || 0),
+        Active: item.querySelector('.link-active')?.checked || false,
+        Icon: item.querySelector('.link-icon')?.value || ''
+      }));
+
+      const phone = [...document.querySelectorAll('#phoneList .repeat-item')].map(item => ({
+        CrewCode: item.querySelector('.ph-code')?.value || '',
+        Name: item.querySelector('.ph-name')?.value || '',
+        Number: item.querySelector('.ph-number')?.value || '',
+        PhotoURL: item.querySelector('.ph-photo')?.value || ''
+      }));
+
+      return { settings, announcements, marqueee, ccMonth, ccYear, topFlight, menu, reports, busSchedule, importantLinks, phone };
+    }
+
+    function saveAllAdmin() {
+      const payload = collectAdminPayload();
+      showToast('Saving changes...');
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          const parsed = apiParse(res);
+          if (!parsed || !parsed.ok) {
+            showToast(parsed && parsed.message ? parsed.message : 'Save failed');
+            return;
+          }
+
+          showToast(parsed.message || 'Saved successfully');
+
+          google.script.run.withSuccessHandler(function(res2) {
+            const parsed2 = apiParse(res2);
+            if (parsed2 && parsed2.ok && parsed2.portal) {
+              portalData = parsed2.portal;
+              applyThemeColor(parsed2.portal && parsed2.portal.settings ? parsed2.portal.settings.ThemeColor : '#4F46E5');
+              lastPortalHash = stableHash(parsed2.portal);
+              buildMoreMenu();
+            }
+
+            google.script.run.withSuccessHandler(function(dir) {
+              const parsedDir = apiParse(dir) || { ok: true, contacts: [] };
+              phoneData = parsedDir.contacts || [];
+              filteredPhoneData = phoneData.slice();
+              lastPhoneHash = stableHash(phoneData);
+              if (currentPage === 'portal' || currentPage === 'phone') render();
+            }).getPhoneDirectory();
+
+          }).getPortalBootstrap();
+
+          loadAdminDashboard();
+        })
+        .withFailureHandler(function() {
+          showToast('Save failed. Check Apps Script execution log.');
+        })
+        .saveAdminDashboard(adminToken, JSON.stringify(payload));
+    }
+
+    function val(id) {
+      const el = document.getElementById(id);
+      return el ? el.value : '';
+    }
+
+    function renderAdminSkeleton() {
+      document.getElementById('app').innerHTML = `
+        <div class="skeleton hero"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      `;
+    }
+
+    function formatDateDisplay(value) {
+      if (!value) return '-';
+      try {
+        const d = new Date(value);
+        if (isNaN(d.getTime())) return String(value);
+        return d.toLocaleString();
+      } catch (e) {
+        return String(value);
+      }
+    }
+
+    function showError(msg) {
+      document.getElementById('app').innerHTML = `<div class="soft-card p-3"><div class="fw-bold fs-4 text-danger mb-1">Loading failed</div><div class="text-secondary">${escapeHtml(msg)}</div></div>`;
+    }
+
+    function selectOptions(options, selected) {
+      return options.map(function(opt) {
+        return `<option value="${escapeHtml(opt)}" ${String(opt) === String(selected) ? 'selected' : ''}>${escapeHtml(opt)}</option>`;
+      }).join('');
+    }
+
+    function toChecked(v) {
+      return (v === true || String(v).toLowerCase() === 'true' || String(v) === '1') ? 'checked' : '';
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeJs(str) {
+      return String(str || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '');
+    }
+
+    applyThemeColor('#4F46E5');
+    init();
+  </script>
+
+
+<script>
+(function(){
+  let sideMenuOpen = false;
+  let headerSearchOpen = false;
+
+  window.updateHeaderText = function(){
+    const settings = portalData && portalData.settings ? portalData.settings : {};
+    const titleEl = document.getElementById('topbarTitle');
+    const subEl = document.getElementById('topbarSub');
+    if (titleEl) titleEl.textContent = currentPage === 'phone' ? 'Phone Book' : currentPage === 'admin' ? 'Admin Dashboard' : (settings.portalTitle || 'TMA Cabin Crew Portal');
+    if (subEl) {
+      if (currentPage === 'phone') subEl.textContent = 'Search crew code, name, or number';
+      else if (currentPage === 'admin') subEl.textContent = 'Manage portal data and settings';
+      else subEl.textContent = settings.subtitle || 'Reports, schedules, policies and quick crew access';
+    }
+  };
+
+  window.openSideMenu = function(){
+    sideMenuOpen = true;
+    document.getElementById('sideMenuOverlay')?.classList.add('show');
+    const menu = document.getElementById('sideMenu');
+    if (menu) { menu.classList.add('show'); menu.setAttribute('aria-hidden','false'); }
+    document.body.classList.add('modal-open');
+  };
+  window.closeSideMenu = function(){
+    sideMenuOpen = false;
+    document.getElementById('sideMenuOverlay')?.classList.remove('show');
+    const menu = document.getElementById('sideMenu');
+    if (menu) { menu.classList.remove('show'); menu.setAttribute('aria-hidden','true'); }
+    if (!document.getElementById('docModal')?.classList.contains('show')) document.body.classList.remove('modal-open');
+  };
+  window.toggleSideMenu = function(){ sideMenuOpen ? closeSideMenu() : openSideMenu(); };
+
+  window.openHeaderSearch = function(){
+    headerSearchOpen = true;
+    document.getElementById('headerSearchSheet')?.classList.add('show');
+    const input = document.getElementById('headerSearchInput');
+    if (input) {
+      input.value = currentPage === 'phone' ? currentSearch : '';
+      setTimeout(()=>input.focus(),60);
+    }
+  };
+  window.closeHeaderSearch = function(){
+    headerSearchOpen = false;
+    document.getElementById('headerSearchSheet')?.classList.remove('show');
+  };
+  window.toggleHeaderSearch = function(){ headerSearchOpen ? closeHeaderSearch() : openHeaderSearch(); };
+
+  window.handleHeaderSearchInput = function(){
+    const input = document.getElementById('headerSearchInput');
+    if (!input) return;
+    const q = String(input.value || '').trim();
+    if (!q) return;
+
+    if (currentPage === 'phone') {
+      currentSearch = q;
+      applyPhoneSearch();
+      closeHeaderSearch();
+      return;
+    }
+
+    const low = q.toLowerCase();
+    if (low === 'phone' || low === 'phone book') { showPage('phone'); closeHeaderSearch(); return; }
+    if (low === 'admin') { showPage('admin'); closeHeaderSearch(); return; }
+
+    const sections = (portalData && portalData.menu) ? portalData.menu : [];
+    const idx = sections.findIndex(section => String(section.title || '').toLowerCase().includes(low));
+    if (idx > -1) {
+      jumpToPortalSection(idx);
+      closeHeaderSearch();
+    } else {
+      showToast('No matching section found');
+    }
+  };
+
+  const _origRender = window.render;
+  window.render = function(){
+    updateHeaderText();
+    _origRender();
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+  };
+
+  window.buildMoreMenu = function() {
+    const menu = document.getElementById('moreMenu');
+    if (!menu || !portalData) return;
+
+    const items = [
+      `<button class="more-item" onclick="goHome()">Home</button>`,
+      `<button class="more-item" onclick="showPage('phone')">Phone Book</button>`,
+      `<button class="more-item" onclick="showPage('admin')">Admin</button>`,
+      `<button class="more-item" onclick="openSideMenu()">Open full menu</button>`
+    ];
+    menu.innerHTML = items.join('');
+    buildSideMenu();
+  };
+
+  window.buildSideMenu = function(){
+    const wrap = document.getElementById('sideMenuBody');
+    if (!wrap || !portalData) return;
+    const mainLinks = [
+      { title: 'Home', icon: 'house', badge: 'APP', action: `goHome(); closeSideMenu();` },
+      { title: 'Phone Book', icon: 'phone', badge: 'APP', action: `showPage('phone'); closeSideMenu();` },
+      { title: 'Admin', icon: 'shield', badge: 'APP', action: `showPage('admin'); closeSideMenu();` }
+    ];
+    let html = `
+      <div class="side-menu-section-label">Quick access</div>
+      <div class="side-menu-list">
+        ${mainLinks.map(item => `
+          <button class="side-menu-item" onclick="${item.action}">
+            <div class="side-menu-item-left">
+              <i data-lucide="${item.icon}"></i>
+              <div class="side-menu-item-title">${escapeHtml(item.title)}</div>
+            </div>
+            <span class="side-menu-badge">${escapeHtml(item.badge)}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="side-menu-section-label">Sections</div>
+      <div class="side-menu-list">
+    `;
+    (portalData.menu || []).forEach((section, idx) => {
+      html += `
+        <button class="side-menu-item" onclick="jumpToPortalSection(${idx}); closeSideMenu();">
+          <div class="side-menu-item-left">
+            <i data-lucide="folder-open"></i>
+            <div class="side-menu-item-title">${escapeHtml(section.title || '')}</div>
+          </div>
+          <span class="side-menu-badge">OPEN</span>
+        </button>
+      `;
+    });
+    html += `</div>`;
+    wrap.innerHTML = html;
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+  };
+
+  const _origRenderPortal = window.renderPortal;
+  window.renderPortal = function() {
+    const p = portalData;
+    const sliderData = getCurrentSliderData();
+    const sliderIndex = getCurrentSliderIndex();
+
+    const cards = sliderData.map(function(c, idx) {
+      const cls = getCardDirectionalClass(idx, sliderIndex, sliderData.length);
+      return `
+        <div class="cover-card ${cls}">
+          <div class="cover-content">
+            <div class="cover-photo">
+              ${c.photoUrl
+                ? `<img src="${escapeHtml(addCacheBust(c.photoUrl))}" onerror="this.style.display='none'; this.parentNode.textContent='${escapeHtml((c.crewCode || 'CC').substring(0,2))}'">`
+                : escapeHtml((c.crewCode || 'CC').substring(0,2))}
+            </div>
+            <div class="cover-rank">Top ${escapeHtml(String(c.rank || idx + 1))}</div>
+            <div class="cover-name">${escapeHtml(c.name || c.crewCode || '')}</div>
+            <div class="cover-caption">${escapeHtml(c.caption || '')}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const menuHtml = (p.menu || []).map(function(m, idx) {
+      return `
+        <div id="portal-section-${idx}" class="section-anchor mb-3">
+          <div class="soft-card menu-card ${openMenus[idx] ? 'open' : ''}" id="menuCard${idx}">
+            <div class="menu-head" onclick="toggleMenu(${idx})">
+              <div class="menu-title">${escapeHtml(m.title || '')}</div>
+              <div class="chevron">⌄</div>
+            </div>
+            <div class="menu-body" id="menuBody${idx}" style="${openMenus[idx] ? 'max-height:1200px;' : ''}">
+              ${(m.items || []).map(function(i, itemIdx) {
+                const monthKey = idx + '_' + itemIdx;
+                if (i.linkType === 'month-history') {
+                  return `
+                    <div class="menu-item" onclick="toggleMonthHistory('${monthKey}')">
+                      <div style="font-weight:700;font-size:12px;color:#596273">${escapeHtml(i.title || '')}</div>
+                      <span class="badge-soft">LIST</span>
+                    </div>
+                    <div class="month-mini-list" id="monthMini${monthKey}" style="display:${openMonthHistory[monthKey] ? 'block' : 'none'};">
+                      ${(i.historyItems || []).map(function(h) {
+                        return `
+                          <div class="month-mini-item">
+                            <div class="month-mini-rank">${escapeHtml(String(h.rank || ''))}</div>
+                            <div class="month-mini-name">${escapeHtml(h.crewCode || h.name || '')}</div>
+                          </div>
+                        `;
+                      }).join('')}
+                    </div>
+                  `;
+                }
+                return `
+                  <div class="menu-item" onclick="openItem('${escapeJs(i.linkType || '')}','${escapeJs(i.url || '')}','${escapeJs(i.title || '')}')">
+                    <div style="font-weight:700;font-size:12px;color:#596273">${escapeHtml(i.title || '')}</div>
+                    <span class="badge-soft">${escapeHtml(i.badge || 'LINK')}</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('app').innerHTML = `
+      
+
+      <div class="activity-ticker mb-3">
+        <div class="activity-ticker-label">Updated</div>
+        <div class="activity-ticker-window">
+          <div class="activity-ticker-track">
+            ${activityTickerHtml || buildTickerText()}
+            <span class="activity-sep">•</span>
+            ${activityTickerHtml || buildTickerText()}
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Cabin Crews of the</div>
+      <div class="soft-card p-3 mb-3">
+        <div class="slider-switch">
+          <button class="slider-switch-btn ${sliderMode === 'ccMonth' ? 'active' : ''}" onclick="switchSliderMode('ccMonth')">Month</button>
+          <button class="slider-switch-btn ${sliderMode === 'ccYear' ? 'active' : ''}" onclick="switchSliderMode('ccYear')">Year</button>
+          <button class="slider-switch-btn ${sliderMode === 'topFlight' ? 'active' : ''}" onclick="switchSliderMode('topFlight')">FLT.Time</button>
+        </div>
+
+        <div class="coverflow-wrap"
+          ontouchstart="sliderTouchStart(event)"
+          ontouchmove="sliderTouchMove(event)"
+          ontouchend="sliderTouchEnd(event)"
+          onmousedown="sliderMouseDown(event)"
+          onmousemove="sliderMouseMove(event)"
+          onmouseup="sliderMouseUp(event)"
+          onmouseleave="sliderMouseLeave(event)">
+          <div class="coverflow-stage">
+            ${cards || '<div class="d-flex align-items-center justify-content-center h-100 text-secondary">No slider data found.</div>'}
+          </div>
+        </div>
+
+        <div class="coverflow-controls">
+          <button class="slider-arrow" onclick="prevSlide()">‹</button>
+          <div class="dots">
+            ${sliderData.map(function(_, idx) {
+              return `<div class="dot ${idx === sliderIndex ? 'active' : ''}" onclick="goToSlide(${idx})"></div>`;
+            }).join('')}
+          </div>
+          <button class="slider-arrow" onclick="nextSlide()">›</button>
+        </div>
+      </div>
+
+      ${menuHtml}
+      ${renderCCMonthShowcase(p.monthHistory || [])}
+
+      <div class="meta-pill-wrap">
+  <div class="meta-pill">
+    <span><strong>Updated</strong> ${formatDateDisplay(p.settings.lastUpdated || '')}</span>
+  </div>
+</div>
+
+      <div class="footer">Developed By <strong>AFKA</strong></div>
+    `;
+
+    if (pendingOpenSectionIndex !== null) {
+      expandMenu(pendingOpenSectionIndex);
+      pendingOpenSectionIndex = null;
+    }
+
+    initSliderDom();
+    startSlider();
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+    renderAnnouncementModal();
+    updateHeaderText();
+  };
+
+  const _origRenderPhone = window.renderPhone;
+  window.renderPhone = function() {
+    document.getElementById('app').innerHTML = `
+      <div class="soft-card p-3 mb-3">
+       <div>
+  <div class="section-label mb-1">Phone Book</div>
+  <div class="text-secondary small">Search by crew code, name, or number</div>
+</div>
+        <input id="phoneSearchInput" class="phone-search-input mt-3" placeholder="Search phone book..." value="${escapeHtml(currentSearch)}">
+      </div>
+      <div id="phoneListContainer">${renderPhoneCardsHtml(filteredPhoneData)}</div>
+      <div class="meta-pill-wrap"><div class="meta-pill"><span><strong>Phone Book</strong> ${filteredPhoneData.length} contacts</span></div></div>
+      <div class="footer">Developed By <strong>AFKA</strong></div>
+    `;
+    const input = document.getElementById('phoneSearchInput');
+    if (input) {
+      input.addEventListener('input', function() {
+        currentSearch = this.value || '';
+        const headerInput = document.getElementById('headerSearchInput');
+        if (headerInput && headerSearchOpen) headerInput.value = currentSearch;
+        debounceSearch(applyPhoneSearch);
+      });
+    }
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+    updateHeaderText();
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const input = document.getElementById('headerSearchInput');
+    if (input) {
+      input.addEventListener('keydown', function(e){ if (e.key === 'Enter') handleHeaderSearchInput(); });
+      input.addEventListener('input', function(){
+        if (currentPage === 'phone') {
+          currentSearch = this.value || '';
+          debounceSearch(applyPhoneSearch);
+        }
+      });
+    }
+  });
+
+  const origCloseDoc = window.closeDocPreview;
+  window.closeDocPreview = function(){
+    origCloseDoc();
+    if (!sideMenuOpen) document.body.classList.remove('modal-open');
+  };
+})();
+</script>
+
+
+<script>
+let announcementShown=false;
+const _origRenderAnnouncement=window.renderAnnouncementModal;
+window.renderAnnouncementModal=function(){
+  if(announcementShown) return;
+  if(typeof _origRenderAnnouncement==='function'){
+    announcementShown=true;
+    _origRenderAnnouncement();
+  }
+};
+</script>
+<!-- PWA Install Banner Utility -->
+<div id="pwaInstallBanner" class="pwa-install-banner hidden">
+  <div class="pwa-install-card">
+    <div class="pwa-install-left">
+      <div class="pwa-install-icon">
+        <img id="pwaInstallIcon" src="https://i.imgur.com/wd5yFdE.png" alt="App Icon">
+      </div>
+      <div class="pwa-install-text">
+        <div class="pwa-install-title" id="pwaInstallTitle">Install Cabin Crew Portal</div>
+        <div class="pwa-install-subtitle" id="pwaInstallSubtitle">Get faster access from your home screen</div>
+      </div>
+    </div>
+
+    <div class="pwa-install-actions">
+      <button id="pwaInstallNowBtn" class="pwa-btn pwa-btn-primary">Install</button>
+      <button id="pwaInstallCloseBtn" class="pwa-btn pwa-btn-ghost" aria-label="Close">✕</button>
+    </div>
+  </div>
+</div>
+
+<!-- iPhone install helper sheet -->
+<div id="iosInstallSheet" class="ios-install-sheet hidden">
+  <div class="ios-install-overlay"></div>
+  <div class="ios-install-panel">
+    <div class="ios-install-handle"></div>
+    <h3>Install this app</h3>
+    <p>To add this portal to your iPhone home screen:</p>
+    <ol>
+      <li>Tap the <strong>Share</strong> button in Safari</li>
+      <li>Select <strong>Add to Home Screen</strong></li>
+      <li>Tap <strong>Add</strong></li>
+    </ol>
+    <button id="iosInstallDoneBtn" class="pwa-btn pwa-btn-primary ios-done-btn">Got it</button>
+  </div>
+</div>
+<script>
+(function () {
+  const STORAGE_KEY_DISMISSED = 'tma_pwa_banner_dismissed_v1';
+  const STORAGE_KEY_INSTALLED = 'tma_pwa_installed_v1';
+
+  let deferredPrompt = null;
+
+  const banner = document.getElementById('pwaInstallBanner');
+  const installBtn = document.getElementById('pwaInstallNowBtn');
+  const closeBtn = document.getElementById('pwaInstallCloseBtn');
+  const iosSheet = document.getElementById('iosInstallSheet');
+  const iosDoneBtn = document.getElementById('iosInstallDoneBtn');
+
+  function isIos() {
+    return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+  }
+
+  function isInStandaloneMode() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+
+  function isBannerDismissed() {
+    return localStorage.getItem(STORAGE_KEY_DISMISSED) === 'true';
+  }
+
+  function setDismissed(value) {
+    localStorage.setItem(STORAGE_KEY_DISMISSED, value ? 'true' : 'false');
+  }
+
+  function setInstalled() {
+    localStorage.setItem(STORAGE_KEY_INSTALLED, 'true');
+  }
+
+  function alreadyInstalled() {
+    return localStorage.getItem(STORAGE_KEY_INSTALLED) === 'true' || isInStandaloneMode();
+  }
+
+  function showBanner() {
+    if (!banner) return;
+    banner.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      banner.classList.add('show');
+    });
+  }
+
+  function hideBanner() {
+    if (!banner) return;
+    banner.classList.remove('show');
+    setTimeout(() => {
+      banner.classList.add('hidden');
+    }, 350);
+  }
+
+  function showIosSheet() {
+    if (!iosSheet) return;
+    iosSheet.classList.remove('hidden');
+  }
+
+  function hideIosSheet() {
+    if (!iosSheet) return;
+    iosSheet.classList.add('hidden');
+  }
+
+function shouldShowBanner() {
+  if (alreadyInstalled()) return false;
+  return true;
+}
+
+  function initInstallUI() {
+    if (!shouldShowBanner()) return;
+
+    setTimeout(() => {
+      showBanner();
+    }, 1200);
+  }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    initInstallUI();
+  });
+
+  installBtn?.addEventListener('click', async function () {
+    if (isIos()) {
+      showIosSheet();
+      return;
+    }
+
+    if (!deferredPrompt) {
+      alert('To install this app, use your browser menu and choose "Install app" or "Add to Home Screen".');
+      return;
+    }
+
+    deferredPrompt.prompt();
+    const result = await deferredPrompt.userChoice;
+
+    if (result && result.outcome === 'accepted') {
+      setInstalled();
+      hideBanner();
+    }
+
+    deferredPrompt = null;
+  });
+
+  closeBtn?.addEventListener('click', function () {
+    setDismissed(true);
+    hideBanner();
+  });
+
+  iosDoneBtn?.addEventListener('click', function () {
+    setDismissed(true);
+    hideIosSheet();
+    hideBanner();
+  });
+
+  window.addEventListener('appinstalled', function () {
+    hideBanner();
+    hideIosSheet();
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (isIos() && !alreadyInstalled() && !isBannerDismissed()) {
+      setTimeout(showBanner, 1200);
+      return;
+    }
+
+    if (!isIos()) {
+      initInstallUI();
+    }
+  });
+})();
+</script>
+<div class="doc-modal" id="docModal">
+  <div class="doc-modal-backdrop" onclick="closeDocPreview()"></div>
+
+  <div class="doc-modal-sheet">
+    <div class="doc-modal-header">
+      <div class="doc-modal-title-wrap">
+        <div class="doc-modal-title">Document Preview</div>
+        <div class="doc-modal-subtitle" id="docModalSubtitle">Preview</div>
+      </div>
+
+      <div class="doc-modal-actions">
+        <button class="doc-icon-btn" type="button" onclick="openDocInNewTab()" title="Open full view">↗</button>
+        <button class="doc-icon-btn" type="button" onclick="closeDocPreview()" title="Close">✕</button>
+      </div>
+    </div>
+
+    <div class="doc-modal-body">
+      <iframe id="docPreviewFrame" src="" loading="lazy" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+</body>
+</html>
